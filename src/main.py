@@ -8,9 +8,8 @@ class Application:
     
     def run(self):
         """Run the application with GUI."""
-        # Create and start the GUI
-        gui = UI(self)
-        gui.run()
+        ui = UI(self)
+        ui.run()
     
     def generate_audio(self, message):
         """Convert the provided message to speech and save to a file.

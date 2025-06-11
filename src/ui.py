@@ -7,6 +7,21 @@ import os
 class UI:
     """Tkinter UI for the SayThis application."""
     
+    # UI Constants
+    DEFAULT_WINDOW_WIDTH = 500
+    DEFAULT_WINDOW_HEIGHT = 400
+    MIN_WINDOW_WIDTH = 400
+    MIN_WINDOW_HEIGHT = 350
+    FRAME_PADDING = 20
+    DEFAULT_FONT_SIZE = 11
+    DEFAULT_FONT_FAMILY = "Arial"
+    BUTTON_PADDING = 5
+    TEXT_HEIGHT = 4
+    TEXT_WIDTH = 50
+    TEXT_PADDING = 5
+    WINDOW_PADDING_ADJUST = 40  # Used to adjust wraplength on resize
+    DEFAULT_WRAP_LENGTH = DEFAULT_WINDOW_WIDTH - WINDOW_PADDING_ADJUST
+
     def __init__(self, app):
         """Initialize the GUI.
         
@@ -17,8 +32,8 @@ class UI:
 
         self.root = tk.Tk()
         self.root.title("SayThis - Text to Speech")
-        self.root.geometry("500x400")
-        self.root.minsize(400, 350)
+        self.root.geometry(f"{self.DEFAULT_WINDOW_WIDTH}x{self.DEFAULT_WINDOW_HEIGHT}")
+        self.root.minsize(self.MIN_WINDOW_WIDTH, self.MIN_WINDOW_HEIGHT)
         self.root.resizable(True, True)
         
         # Initialize pygame mixer for audio playback
@@ -34,14 +49,16 @@ class UI:
     def _create_widgets(self):
         """Create and layout all GUI widgets."""
         # Main frame
-        main_frame = ttk.Frame(self.root, padding="20 20 20 20")
+        main_frame = ttk.Frame(
+            self.root,
+            padding=f"{self.FRAME_PADDING} {self.FRAME_PADDING} {self.FRAME_PADDING} {self.FRAME_PADDING}")
         main_frame.pack(fill=tk.BOTH, expand=True)
         
         # Style configuration
         style = ttk.Style()
-        style.configure("TLabel", font=("Arial", 11))
-        style.configure("TButton", font=("Arial", 11))
-        style.configure("TEntry", font=("Arial", 11))
+        style.configure("TLabel", font=(self.DEFAULT_FONT_FAMILY, self.DEFAULT_FONT_SIZE))
+        style.configure("TButton", font=(self.DEFAULT_FONT_FAMILY, self.DEFAULT_FONT_SIZE))
+        style.configure("TEntry", font=(self.DEFAULT_FONT_FAMILY, self.DEFAULT_FONT_SIZE))
         
         # Message label
         message_label = ttk.Label(main_frame, text="Enter your message:")
@@ -53,12 +70,12 @@ class UI:
         
         self.message_text = tk.Text(
             message_frame, 
-            height=4,
-            width=50,
+            height=self.TEXT_HEIGHT,
+            width=self.TEXT_WIDTH,
             wrap=tk.WORD,
-            font=("Arial", 11),
-            padx=5,
-            pady=5
+            font=(self.DEFAULT_FONT_FAMILY, self.DEFAULT_FONT_SIZE),
+            padx=self.TEXT_PADDING,
+            pady=self.TEXT_PADDING
         )
         self.message_text.pack(fill=tk.X, expand=True, side=tk.LEFT)
         
@@ -80,7 +97,7 @@ class UI:
             text="Generate Audio", 
             command=self._on_generate
         )
-        self.generate_button.pack(side=tk.RIGHT, padx=5)
+        self.generate_button.pack(side=tk.RIGHT, padx=self.BUTTON_PADDING)
         
         # Clear button
         clear_button = ttk.Button(
@@ -88,7 +105,7 @@ class UI:
             text="Clear", 
             command=self._clear_text_input
         )
-        clear_button.pack(side=tk.RIGHT, padx=5)
+        clear_button.pack(side=tk.RIGHT, padx=self.BUTTON_PADDING)
         
         # Status label
         self.status_var = tk.StringVar(value="Ready")
@@ -96,7 +113,7 @@ class UI:
             main_frame, 
             textvariable=self.status_var,
             foreground="gray",
-            wraplength=460,  # Set wrap length slightly less than window width
+            wraplength=self.DEFAULT_WRAP_LENGTH,  # Set wrap length slightly less than window width
             justify=tk.LEFT
         )
         self.status_label.pack(anchor=tk.W, pady=(10, 0), fill=tk.X, expand=True)
@@ -116,7 +133,7 @@ class UI:
             command=self._play_audio,
             state="disabled"  # Initially disabled until audio is generated
         )
-        self.play_button.pack(side=tk.LEFT, padx=5)
+        self.play_button.pack(side=tk.LEFT, padx=self.BUTTON_PADDING)
         
         # Stop button
         self.stop_button = ttk.Button(
@@ -125,7 +142,7 @@ class UI:
             command=self._stop_audio,
             state="disabled"  # Initially disabled until audio is playing
         )
-        self.stop_button.pack(side=tk.LEFT, padx=5)
+        self.stop_button.pack(side=tk.LEFT, padx=self.BUTTON_PADDING)
         
         # Audio file label
         self.audio_file_var = tk.StringVar(value="No audio file generated yet")
@@ -133,7 +150,7 @@ class UI:
             audio_frame,
             textvariable=self.audio_file_var,
             foreground="gray",
-            wraplength=460
+            wraplength=self.DEFAULT_WRAP_LENGTH
         )
         audio_file_label.pack(anchor=tk.W, pady=(5, 0), fill=tk.X)
 
@@ -215,9 +232,8 @@ class UI:
         # Only process if the event is from the main window
         if event.widget == self.root:
             # Update wrap length to be slightly less than the window width
-            new_width = event.width - 40  # Subtract padding
-            if new_width > 100:  # Minimum reasonable wrap length
-                self.status_label.configure(wraplength=new_width)
+            new_width = event.width - self.WINDOW_PADDING_ADJUST  # Subtract padding
+            self.status_label.configure(wraplength=new_width)
     
     def _clear_text_input(self):
         """Clear the text input field."""

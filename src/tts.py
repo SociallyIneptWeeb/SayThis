@@ -8,6 +8,13 @@ from elevenlabs.core.api_error import ApiError
 class TextToSpeech:
     """Class for handling text-to-speech conversion using ElevenLabs API."""
     
+    # API Constants
+    DEFAULT_API_KEY = "YOUR-API-KEY"  # Replace with your actual API key
+    DEFAULT_VOICE_ID = "JBFqnCBsd6RMkjVDRZzb"
+    DEFAULT_MODEL_ID = "eleven_multilingual_v2"
+    DEFAULT_OUTPUT_FORMAT = "mp3_22050_32"
+    DEFAULT_FILE_EXTENSION = ".mp3"
+    
     def __init__(self, voice_id=None, model_id=None, output_format=None):
         """Initialize the TTS engine with ElevenLabs.
         
@@ -17,12 +24,12 @@ class TextToSpeech:
             output_format (str, optional): Format of the output audio.
         """
         # Initialize ElevenLabs client
-        self.client = ElevenLabs(api_key="YOUR-API-KEY")  # Replace with your actual API key
+        self.client = ElevenLabs(api_key=self.DEFAULT_API_KEY)
         
         # Default configuration
-        self.voice_id = voice_id or "JBFqnCBsd6RMkjVDRZzb"
-        self.model_id = model_id or "eleven_multilingual_v2"
-        self.output_format = output_format or "mp3_22050_32"
+        self.voice_id = voice_id or self.DEFAULT_VOICE_ID
+        self.model_id = model_id or self.DEFAULT_MODEL_ID
+        self.output_format = output_format or self.DEFAULT_OUTPUT_FORMAT
     
     def configure_voice(self, voice_id):
         """Configure the voice to use.
@@ -69,7 +76,7 @@ class TextToSpeech:
         
         # Generate a unique filename if not provided
         if output_path is None:
-            output_path = f"{uuid.uuid4()}.mp3"
+            output_path = f"{uuid.uuid4()}{self.DEFAULT_FILE_EXTENSION}"
         
         # Create a Path object for the output file
         output_file = Path(output_path)
@@ -89,5 +96,7 @@ class TextToSpeech:
 
 # Example usage if this file is run directly
 if __name__ == "__main__":
+    TEST_MESSAGE = "This is a test from ElevenLabs TTS."
+    
     tts = TextToSpeech()
-    tts.synthesize_speech("This is a test from ElevenLabs TTS.")
+    tts.synthesize_speech(TEST_MESSAGE)

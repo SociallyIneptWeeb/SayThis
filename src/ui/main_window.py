@@ -94,6 +94,8 @@ class MainWindow:
             
         except RuntimeError as e:
             self.status_label.set_error(str(e))
+        except Exception as e:
+            self.status_label.set_error(f"Unexpected error: {str(e)}")
         finally:
             self.control_buttons.set_generate_enabled(True)
     

@@ -42,7 +42,7 @@ class AudioControls:
             self.audio_buttons_frame,
             text=UIConstants.PLAY_BUTTON_TEXT,
             command=self._play_audio,
-            state="disabled"  # Initially disabled until audio is generated
+            state=UIConstants.STATE_DISABLED  # Initially disabled until audio is generated
         )
         self.play_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
         
@@ -51,7 +51,7 @@ class AudioControls:
             self.audio_buttons_frame,
             text=UIConstants.STOP_BUTTON_TEXT,
             command=self._stop_audio,
-            state="disabled"  # Initially disabled until audio is playing
+            state=UIConstants.STATE_DISABLED  # Initially disabled until audio is playing
         )
         self.stop_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
         
@@ -60,7 +60,7 @@ class AudioControls:
         self.audio_file_label = ttk.Label(
             self.audio_frame,
             textvariable=self.audio_file_var,
-            foreground="gray",
+            foreground=UIConstants.COLOR_GRAY,
             wraplength=UIConstants.DEFAULT_WRAP_LENGTH
         )
         self.audio_file_label.pack(anchor=tk.W, pady=(5, 0), fill=tk.X)
@@ -73,7 +73,7 @@ class AudioControls:
         """
         self.current_audio_file = file_path
         self.audio_file_var.set(str(file_path))
-        self.play_button.configure(state="normal")
+        self.play_button.configure(state=UIConstants.STATE_NORMAL)
     
     def _play_audio(self):
         """Play the generated audio file."""
@@ -83,25 +83,25 @@ class AudioControls:
                 pygame.mixer.music.play()
                 
                 # Update button states
-                self.play_button.configure(state="disabled")
-                self.stop_button.configure(state="normal")
-                self.status_label.set_status(UIConstants.STATUS_PLAYING, "blue")
+                self.play_button.configure(state=UIConstants.STATE_DISABLED)
+                self.stop_button.configure(state=UIConstants.STATE_NORMAL)
+                self.status_label.set_status(UIConstants.STATUS_PLAYING, UIConstants.STATUS_COLOR_PROCESSING)
             except Exception as e:
                 self.status_label.set_status(
                     UIConstants.STATUS_AUDIO_ERROR.format(str(e)), 
-                    "red"
+                    UIConstants.STATUS_COLOR_ERROR
                 )
         else:
-            self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, "orange")
+            self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, UIConstants.STATUS_COLOR_WARNING)
     
     def _stop_audio(self):
         """Stop the audio playback."""
         pygame.mixer.music.stop()
         
         # Update button states
-        self.play_button.configure(state="normal")
-        self.stop_button.configure(state="disabled")
-        self.status_label.set_status(UIConstants.STATUS_STOPPED, "gray")
+        self.play_button.configure(state=UIConstants.STATE_NORMAL)
+        self.stop_button.configure(state=UIConstants.STATE_DISABLED)
+        self.status_label.set_status(UIConstants.STATUS_STOPPED, UIConstants.STATUS_COLOR_READY)
     
     def cleanup(self):
         """Clean up audio resources."""

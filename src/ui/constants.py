@@ -25,6 +25,24 @@ class UIConstants:
     DEFAULT_WRAP_LENGTH = DEFAULT_WINDOW_WIDTH - WINDOW_PADDING_ADJUST
     MIN_WRAP_LENGTH = 100  # Minimum reasonable wrap length
     
+    # Colors
+    COLOR_GRAY = "gray"
+    COLOR_BLUE = "blue"
+    COLOR_GREEN = "green"
+    COLOR_RED = "red"
+    COLOR_ORANGE = "orange"
+
+    # Status colors (semantic mapping)
+    STATUS_COLOR_READY = COLOR_GRAY
+    STATUS_COLOR_PROCESSING = COLOR_BLUE
+    STATUS_COLOR_SUCCESS = COLOR_GREEN
+    STATUS_COLOR_ERROR = COLOR_RED
+    STATUS_COLOR_WARNING = COLOR_ORANGE
+    
+    # Button states
+    STATE_DISABLED = "disabled"
+    STATE_NORMAL = "normal"
+    
     # UI text labels
     WINDOW_TITLE = "SayThis - Text to Speech"
     MESSAGE_LABEL_TEXT = "Enter your message:"

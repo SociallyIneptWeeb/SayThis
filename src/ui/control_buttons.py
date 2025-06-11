@@ -47,5 +47,5 @@ class ControlButtons:
         Args:
             enabled (bool): Whether to enable the button
         """
-        state = "normal" if enabled else "disabled"
+        state = UIConstants.STATE_NORMAL if enabled else UIConstants.STATE_DISABLED
         self.generate_button.configure(state=state)

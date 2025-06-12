@@ -99,26 +99,32 @@ class AudioControls:
         else:
             self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, UIConstants.STATUS_COLOR_WARNING)
     
+    def _reset_controls(self, status_message):
+        """Reset button states and playing flag with optional status update.
+        
+        Args:
+            status_message (str, optional): Status message to display
+        """
+        self.is_playing = False
+        self.play_button.configure(state=UIConstants.STATE_NORMAL)
+        self.stop_button.configure(state=UIConstants.STATE_DISABLED)
+        
+        self.status_label.set_status(status_message, UIConstants.STATUS_COLOR_READY)
+    
     def _stop_audio(self):
         """Stop the audio playback."""
         pygame.mixer.music.stop()
         
         # Update button states and playing flag
-        self.is_playing = False
-        self.play_button.configure(state=UIConstants.STATE_NORMAL)
-        self.stop_button.configure(state=UIConstants.STATE_DISABLED)
-        self.status_label.set_status(UIConstants.STATUS_STOPPED, UIConstants.STATUS_COLOR_READY)
-    
+        self._reset_controls(UIConstants.STATUS_STOPPED)
+
     def _monitor_playback(self):
         """Monitor audio playback and reset button states when finished."""
         if self.is_playing:
             # Check if audio is still playing
             if not pygame.mixer.music.get_busy():
                 # Audio has finished playing naturally
-                self.is_playing = False
-                self.play_button.configure(state=UIConstants.STATE_NORMAL)
-                self.stop_button.configure(state=UIConstants.STATE_DISABLED)
-                self.status_label.set_status(UIConstants.STATUS_READY, UIConstants.STATUS_COLOR_READY)
+                self._reset_controls(UIConstants.STATUS_READY)
             else:
                 # Audio is still playing, check again in 100ms
                 self.parent.after(100, self._monitor_playback)
@@ -128,4 +134,5 @@ class AudioControls:
         self.is_playing = False
         if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
             pygame.mixer.music.stop()
+            
         pygame.mixer.quit()

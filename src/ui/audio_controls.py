@@ -126,13 +126,13 @@ class AudioControls:
                 # Audio has finished playing naturally
                 self._reset_controls(UIConstants.STATUS_READY)
             else:
-                # Audio is still playing, check again in 100ms
-                self.parent.after(100, self._monitor_playback)
+                # Audio is still playing, check again after the monitoring interval
+                self.parent.after(UIConstants.AUDIO_MONITOR_INTERVAL_MS, self._monitor_playback)
     
     def cleanup(self):
         """Clean up audio resources."""
         self.is_playing = False
         if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
             pygame.mixer.music.stop()
-            
+
         pygame.mixer.quit()

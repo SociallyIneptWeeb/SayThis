@@ -43,6 +43,9 @@ class UIConstants:
     STATE_DISABLED = "disabled"
     STATE_NORMAL = "normal"
     
+    # Audio playback settings
+    AUDIO_MONITOR_INTERVAL_MS = 100  # Interval for checking audio playback status
+    
     # UI text labels
     WINDOW_TITLE = "SayThis - Text to Speech"
     MESSAGE_LABEL_TEXT = "Enter your message:"

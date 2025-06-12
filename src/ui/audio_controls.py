@@ -18,6 +18,7 @@ class AudioControls:
         self.parent = parent
         self.status_label = status_label
         self.current_audio_file = None
+        self.is_playing = False
         self._create_widgets()
         
         # Initialize pygame mixer for audio playback
@@ -86,6 +87,10 @@ class AudioControls:
                 self.play_button.configure(state=UIConstants.STATE_DISABLED)
                 self.stop_button.configure(state=UIConstants.STATE_NORMAL)
                 self.status_label.set_status(UIConstants.STATUS_PLAYING, UIConstants.STATUS_COLOR_PROCESSING)
+                
+                # Set playing flag and start monitoring playback
+                self.is_playing = True
+                self._monitor_playback()
             except Exception as e:
                 self.status_label.set_status(
                     UIConstants.STATUS_AUDIO_ERROR.format(str(e)), 
@@ -94,18 +99,40 @@ class AudioControls:
         else:
             self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, UIConstants.STATUS_COLOR_WARNING)
     
+    def _reset_controls(self, status_message):
+        """Reset button states and playing flag with optional status update.
+        
+        Args:
+            status_message (str, optional): Status message to display
+        """
+        self.is_playing = False
+        self.play_button.configure(state=UIConstants.STATE_NORMAL)
+        self.stop_button.configure(state=UIConstants.STATE_DISABLED)
+        
+        self.status_label.set_status(status_message, UIConstants.STATUS_COLOR_READY)
+    
     def _stop_audio(self):
         """Stop the audio playback."""
         pygame.mixer.music.stop()
         
-        # Update button states
-        self.play_button.configure(state=UIConstants.STATE_NORMAL)
-        self.stop_button.configure(state=UIConstants.STATE_DISABLED)
-        self.status_label.set_status(UIConstants.STATUS_STOPPED, UIConstants.STATUS_COLOR_READY)
+        # Update button states and playing flag
+        self._reset_controls(UIConstants.STATUS_STOPPED)
+
+    def _monitor_playback(self):
+        """Monitor audio playback and reset button states when finished."""
+        if self.is_playing:
+            # Check if audio is still playing
+            if not pygame.mixer.music.get_busy():
+                # Audio has finished playing naturally
+                self._reset_controls(UIConstants.STATUS_READY)
+            else:
+                # Audio is still playing, check again after the monitoring interval
+                self.parent.after(UIConstants.AUDIO_MONITOR_INTERVAL_MS, self._monitor_playback)
     
     def cleanup(self):
         """Clean up audio resources."""
-        # Stop any playing audio
+        self.is_playing = False
         if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
             pygame.mixer.music.stop()
+
         pygame.mixer.quit()

@@ -61,7 +61,7 @@ class AudioControls:
         self.audio_file_label = ttk.Label(
             self.audio_frame,
             textvariable=self.audio_file_var,
-            foreground=UIConstants.COLOR_GRAY,
+            foreground="gray",
             wraplength=UIConstants.DEFAULT_WRAP_LENGTH
         )
         self.audio_file_label.pack(anchor=tk.W, pady=(5, 0), fill=tk.X)
@@ -92,18 +92,15 @@ class AudioControls:
                 self.is_playing = True
                 self._monitor_playback()
             except Exception as e:
-                self.status_label.set_status(
-                    UIConstants.STATUS_AUDIO_ERROR.format(str(e)), 
-                    UIConstants.STATUS_COLOR_ERROR
-                )
+                self.status_label.set_error(f"Error playing audio: {str(e)}")
         else:
             self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, UIConstants.STATUS_COLOR_WARNING)
     
     def _reset_controls(self, status_message):
-        """Reset button states and playing flag with optional status update.
+        """Reset button states and playing flag with status update.
         
         Args:
-            status_message (str, optional): Status message to display
+            status_message (str): Status message to display
         """
         self.is_playing = False
         self.play_button.configure(state=UIConstants.STATE_NORMAL)

@@ -6,6 +6,7 @@ from .message_input import MessageInput
 from .control_buttons import ControlButtons
 from .status_label import StatusLabel
 from .audio_controls import AudioControls
+from .api_key_dialog import ApiKeyDialog
 
 
 class MainWindow:
@@ -19,6 +20,7 @@ class MainWindow:
         """
         self.app = app
         self._setup_window()
+        self._create_menu_bar()
         self._create_components()
         self._center_window()
         
@@ -54,6 +56,25 @@ class MainWindow:
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)
         )
     
+    def _create_menu_bar(self):
+        """Create the menu bar with Settings menu."""
+        # Create the menu bar
+        menubar = tk.Menu(self.root)
+        self.root.config(menu=menubar)
+        
+        # Create Settings menu
+        settings_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(
+            label=UIConstants.MENU_SETTINGS, 
+            menu=settings_menu
+        )
+        
+        # Add API Key menu item
+        settings_menu.add_command(
+            label=UIConstants.MENU_API_KEY,
+            command=self._on_api_key_config
+        )
+    
     def _create_components(self):
         """Create and layout all UI components."""
         # Main frame
@@ -77,12 +98,16 @@ class MainWindow:
     def _on_generate(self):
         """Handle generate button click."""
         if self.message_input.is_empty():
-            self.status_label.set_empty_message_warning()
+            self.status_label.set_status(UIConstants.STATUS_EMPTY_MESSAGE, UIConstants.STATUS_COLOR_WARNING)
+            return
+
+        if not self.app.get_api_key():
+            self.status_label.set_status(UIConstants.API_KEY_REQUIRED_MESSAGE, UIConstants.STATUS_COLOR_WARNING)
             return
         
         try:
             self.control_buttons.set_generate_enabled(False)
-            self.status_label.set_generating()
+            self.status_label.set_status(UIConstants.STATUS_GENERATING, UIConstants.STATUS_COLOR_PROCESSING)
             self.root.update_idletasks()
 
             message = self.message_input.get_text()
@@ -90,7 +115,7 @@ class MainWindow:
             
             # Show success message and enable playback
             self.audio_controls.set_audio_file(output_path)
-            self.status_label.set_success()
+            self.status_label.set_status(UIConstants.STATUS_SUCCESS, UIConstants.STATUS_COLOR_SUCCESS)
             
         except RuntimeError as e:
             self.status_label.set_error(str(e))
@@ -133,3 +158,15 @@ class MainWindow:
         """Clean up resources and close the application."""
         self.audio_controls.cleanup()
         self.root.destroy()
+    
+    def _on_api_key_config(self):
+        """Handle API key configuration menu selection."""
+        dialog = ApiKeyDialog(self.root, self.app.get_api_key())
+        api_key = dialog.show()
+        
+        if api_key is not None:
+            try:
+                self.app.update_api_key(api_key)
+                self.status_label.set_status(UIConstants.API_KEY_SUCCESS_MESSAGE, UIConstants.STATUS_COLOR_SUCCESS)
+            except Exception as e:
+                self.status_label.set_error(f"Error updating API key: {str(e)}")

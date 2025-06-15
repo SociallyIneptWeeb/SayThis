@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import pygame
 import os
-from .constants import UIConstants
+from ..constants import UIConstants
 
 
 class AudioControls:

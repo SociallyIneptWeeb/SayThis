@@ -53,7 +53,7 @@ class EventHandler:
             # Show success message and enable playback
             self.audio_controls.set_audio_file(output_path)
             self.status_label.set_status(
-                UIConstants.STATUS_SUCCESS, 
+                UIConstants.STATUS_GENERATE_SUCCESS, 
                 UIConstants.STATUS_COLOR_SUCCESS
             )
             

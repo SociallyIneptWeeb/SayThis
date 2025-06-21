@@ -46,16 +46,19 @@ class UIConstants:
     AUDIO_FRAME_TEXT = "Audio Playback"
     PLAY_BUTTON_TEXT = "▶️ Play"
     STOP_BUTTON_TEXT = "⏹️ Stop"
+    DOWNLOAD_BUTTON_TEXT = "📥 Download"
     
     # Status messages
     STATUS_READY = "Ready"
     STATUS_GENERATING = "⏳ Generating audio..."
-    STATUS_SUCCESS = "✅ Audio generated successfully!"
+    STATUS_GENERATE_SUCCESS = "✅ Audio generated successfully!"
     STATUS_PLAYING = "▶️ Playing audio..."
     STATUS_STOPPED = "⏹️ Audio stopped."
     STATUS_EMPTY_MESSAGE = "⚠️ Please enter a message to convert to speech."
     STATUS_NO_AUDIO_FILE = "⚠️ No audio file found to play."
     STATUS_ERROR = "❌ {}"
+    STATUS_DOWNLOAD_SUCCESS = "📥 Audio file downloaded successfully!"
+    STATUS_DOWNLOAD_CANCELLED = "Download cancelled."
     
     # Default values
     DEFAULT_AUDIO_FILE_STATUS = "No audio file generated yet"

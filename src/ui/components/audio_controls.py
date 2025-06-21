@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 import pygame
+import shutil
 from pathlib import Path
 from ..constants import UIConstants
 
@@ -43,7 +44,7 @@ class AudioControls:
             self.audio_buttons_frame,
             text=UIConstants.PLAY_BUTTON_TEXT,
             command=self._play_audio,
-            state=UIConstants.STATE_DISABLED  # Initially disabled until audio is generated
+            state=UIConstants.STATE_DISABLED
         )
         self.play_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
         
@@ -52,9 +53,18 @@ class AudioControls:
             self.audio_buttons_frame,
             text=UIConstants.STOP_BUTTON_TEXT,
             command=self._stop_audio,
-            state=UIConstants.STATE_DISABLED  # Initially disabled until audio is playing
+            state=UIConstants.STATE_DISABLED
         )
         self.stop_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
+        
+        # Download button
+        self.download_button = ttk.Button(
+            self.audio_buttons_frame,
+            text=UIConstants.DOWNLOAD_BUTTON_TEXT,
+            command=self._download_audio,
+            state=UIConstants.STATE_DISABLED
+        )
+        self.download_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
         
         # Audio file label
         self.audio_file_var = tk.StringVar(value=UIConstants.DEFAULT_AUDIO_FILE_STATUS)
@@ -75,6 +85,7 @@ class AudioControls:
         self.current_audio_file = Path(file_path)
         self.audio_file_var.set(self.current_audio_file.name)
         self.play_button.configure(state=UIConstants.STATE_NORMAL)
+        self.download_button.configure(state=UIConstants.STATE_NORMAL)
     
     def _play_audio(self):
         """Play the generated audio file."""
@@ -126,6 +137,36 @@ class AudioControls:
                 # Audio is still playing, check again after the monitoring interval
                 self.parent.after(UIConstants.AUDIO_MONITOR_INTERVAL_MS, self._monitor_playback)
     
+    def _download_audio(self):
+        """Download the current audio file to a user-selected location."""
+        if not self.current_audio_file or not self.current_audio_file.exists():
+            self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, UIConstants.STATUS_COLOR_WARNING)
+            return
+        
+        # Get the file extension from the current audio file
+        file_extension = self.current_audio_file.suffix
+        
+        # Open file dialog to choose download location
+        save_path = filedialog.asksaveasfilename(
+            title="Save Audio File",
+            defaultextension=file_extension,
+            filetypes=[
+                ("Audio Files", f"*{file_extension}"),
+            ],
+            initialfile=self.current_audio_file.name
+        )
+        
+        if save_path:
+            try:
+                # Copy the file to the selected location
+                shutil.copy2(self.current_audio_file, save_path)
+                self.status_label.set_status(UIConstants.STATUS_DOWNLOAD_SUCCESS, UIConstants.STATUS_COLOR_SUCCESS)
+            except Exception as e:
+                self.status_label.set_error(f"Error downloading audio: {str(e)}")
+        else:
+            # User cancelled the download
+            self.status_label.set_status(UIConstants.STATUS_DOWNLOAD_CANCELLED, UIConstants.STATUS_COLOR_READY)
+
     def cleanup(self):
         """Clean up audio resources."""
         self.is_playing = False

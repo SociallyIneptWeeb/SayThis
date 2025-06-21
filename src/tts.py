@@ -44,7 +44,10 @@ class TextToSpeech:
             output_format=tts_params["output_format"],
         )
         
-        output_file = Path(f"{uuid.uuid4()}{tts_params['file_extension']}")
+        audio_dir = Path(__file__).parent / "data" / "audio"
+        audio_dir.mkdir(parents=True, exist_ok=True)
+        
+        output_file = audio_dir / f"{uuid.uuid4()}{tts_params['file_extension']}"
 
         try:
             # Write the audio stream to the file

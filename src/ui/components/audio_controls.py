@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import pygame
-import os
+from pathlib import Path
 from ..constants import UIConstants
 
 
@@ -72,13 +72,13 @@ class AudioControls:
         Args:
             file_path (str): Path to the audio file
         """
-        self.current_audio_file = file_path
-        self.audio_file_var.set(str(file_path))
+        self.current_audio_file = Path(file_path)
+        self.audio_file_var.set(self.current_audio_file.name)
         self.play_button.configure(state=UIConstants.STATE_NORMAL)
     
     def _play_audio(self):
         """Play the generated audio file."""
-        if self.current_audio_file and os.path.exists(self.current_audio_file):
+        if self.current_audio_file and self.current_audio_file.exists():
             try:
                 pygame.mixer.music.load(self.current_audio_file)
                 pygame.mixer.music.play()

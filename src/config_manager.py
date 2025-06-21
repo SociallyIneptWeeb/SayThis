@@ -7,7 +7,7 @@ class ConfigManager:
     
     def __init__(self):
         """Initialize the configuration manager."""
-        self.config_filepath = Path(__file__).parent / "config.json"
+        self.config_filepath = Path(__file__).parent / "data" / "config.json"
         
         # Default configuration
         self.default_config = {

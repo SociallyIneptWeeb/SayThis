@@ -20,7 +20,7 @@ jobs:
         python-version: 3.9
 
     - run: pip install -r requirements.txt pyinstaller
-    - run: pyinstaller --add-data "src/data:data" src/main.py --noconsole --name=SayThis
+    - run: pyinstaller --add-data "src/data:data" src/main.py --noconsole --name=SayThis-${RUNNER_OS}
     - uses: actions/upload-artifact@v4
       with:
         path: dist/*

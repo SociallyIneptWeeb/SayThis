@@ -1,3 +1,5 @@
+name: Build and Release
+
 on:
   workflow_dispatch:
 
@@ -7,11 +9,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -24,24 +22,19 @@ jobs:
       run: pip install -r requirements.txt pyinstaller
 
     - name: Build executable
-      run: pyinstaller --add-data "src/data:data" src/main.py --noconsole --name=SayThis-${{ runner.os }}
+      run: pyinstaller --add-data "src/data:data" src/main.py --noconsole --name=SayThis
 
-    - name: Zip dist folder (Windows)
-      if: runner.os == 'Windows'
+    - name: Zip dist folder
       run: |
-        Compress-Archive -Path dist/* -DestinationPath saythis-${{ runner.os }}.zip
+        cd dist
+        Compress-Archive -Path * -DestinationPath ../saythis.zip
       shell: powershell
-
-    - name: Zip dist folder (Unix)
-      if: runner.os != 'Windows'
-      run: |
-        zip -r saythis-${{ runner.os }}.zip dist/
 
     - name: Upload ZIP as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: saythis-${{ runner.os }}
-        path: saythis-${{ runner.os }}.zip
+        name: saythis
+        path: saythis.zip
 
   release:
     runs-on: ubuntu-latest
@@ -73,6 +66,6 @@ jobs:
       with:
         tag_name: ${{ steps.version.outputs.version }}
         name: Release ${{ steps.version.outputs.version }}
-        files: ./artifacts/**/saythis-*.zip
+        files: ./artifacts/**/saythis.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

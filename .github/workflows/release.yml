@@ -48,7 +48,7 @@ jobs:
     - name: Determine next release version
       id: version
       run: |
-        count=$(gh release list --limit 1000 | wc -l)
+        count=$(gh release list --limit 1000 --json tagName --jq 'length')
         version="v1.$count"
         echo "version=$version" >> "$GITHUB_OUTPUT"
 

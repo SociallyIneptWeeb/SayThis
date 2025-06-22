@@ -22,7 +22,14 @@ jobs:
     - name: Build executable
       run: pyinstaller --add-data "src/data:data" src/main.py --noconsole --name=SayThis-${{ runner.os }}
 
-    - name: Zip dist folder
+    - name: Zip dist folder (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        Compress-Archive -Path dist/* -DestinationPath saythis-${{ runner.os }}.zip
+      shell: powershell
+
+    - name: Zip dist folder (Unix)
+      if: runner.os != 'Windows'
       run: |
         zip -r saythis-${{ runner.os }}.zip dist/
 

@@ -60,6 +60,10 @@ class UIConstants:
     STATUS_DOWNLOAD_SUCCESS = "📥 Audio file downloaded successfully!"
     STATUS_DOWNLOAD_CANCELLED = "Download cancelled."
     
+    # Character usage labels
+    UNSET_USAGE = "--"
+    CHARACTER_USAGE_FORMAT = "Used: {} / {} characters"
+
     # Default values
     DEFAULT_AUDIO_FILE_STATUS = "No audio file generated yet"
 

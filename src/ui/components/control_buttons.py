@@ -23,7 +23,7 @@ class ControlButtons:
         """Create the control button widgets."""
         # Button frame
         self.button_frame = ttk.Frame(self.parent)
-        self.button_frame.pack(fill=tk.X, pady=(10, 0))
+        self.button_frame.pack(fill=tk.X)
         
         # Generate button
         self.generate_button = ttk.Button(

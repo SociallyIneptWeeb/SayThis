@@ -7,17 +7,19 @@ from ..dialogs import ApiKeyDialog
 class MenuManager:
     """Component for managing menu bar creation and menu-related functionality."""
     
-    def __init__(self, root, app, status_label):
+    def __init__(self, root, app, status_label, on_api_key_updated):
         """Initialize the menu manager.
         
         Args:
             root: The root window
             app: The Application instance
             status_label: The status label component for displaying messages
+            on_api_key_updated: Callback function to call when API key is updated
         """
         self.root = root
         self.app = app
         self.status_label = status_label
+        self.on_api_key_updated = on_api_key_updated
     
     def create_menu_bar(self):
         """Create the menu bar with Settings menu."""
@@ -50,5 +52,7 @@ class MenuManager:
                     UIConstants.API_KEY_SUCCESS_MESSAGE, 
                     UIConstants.STATUS_COLOR_SUCCESS
                 )
+                
+                self.on_api_key_updated()
             except Exception as e:
                 self.status_label.set_error(f"Error updating API key: {str(e)}")

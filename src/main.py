@@ -51,6 +51,17 @@ class Application:
             dict: Dictionary containing TTS parameters.
         """
         return self.config_manager.get_tts_parameters()
+    
+    def get_character_usage(self):
+        """Get character usage information from the TTS engine.
+        
+        Returns:
+            tuple: A tuple containing (character_count, character_limit).
+            
+        Raises:
+            RuntimeError: If there's an error retrieving usage information.
+        """
+        return self.tts_engine.get_character_usage()
 
 
 def main():

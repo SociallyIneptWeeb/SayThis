@@ -24,9 +24,8 @@ class StatusLabel:
             textvariable=self.status_var,
             foreground=UIConstants.STATUS_COLOR_READY,
             wraplength=UIConstants.DEFAULT_WRAP_LENGTH,
-            justify=tk.LEFT
         )
-        self.status_label.pack(anchor=tk.W, pady=(10, 0), fill=tk.X, expand=True)
+        self.status_label.pack(side=tk.BOTTOM, anchor=tk.W, pady=(10, 0), fill=tk.X)
     
     def set_status(self, message, color="gray"):
         """Set the status message and color.

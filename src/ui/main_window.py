@@ -54,6 +54,14 @@ class MainWindow:
         self.main_frame.pack(fill=tk.BOTH, expand=True)
         
         # Create components
+        self.audio_controls = AudioControls(
+            self.main_frame, 
+            self._on_play_audio, 
+            self._on_stop_audio, 
+            self._on_download_audio
+        )
+        self.status_label = StatusLabel(self.main_frame)
+        
         self.message_input = MessageInput(self.main_frame)
         self.control_buttons = ControlButtons(
             self.main_frame, 
@@ -61,13 +69,6 @@ class MainWindow:
             self._on_clear
         )
         self.character_usage_label = CharacterUsageLabel(self.main_frame)
-        self.status_label = StatusLabel(self.main_frame)
-        self.audio_controls = AudioControls(
-            self.main_frame, 
-            self._on_play_audio, 
-            self._on_stop_audio, 
-            self._on_download_audio
-        )
     
     def _on_generate(self):
         """Handle generate button click."""

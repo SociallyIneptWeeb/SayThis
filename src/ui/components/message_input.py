@@ -26,7 +26,7 @@ class MessageInput:
         
         # Message input field frame
         self.message_frame = ttk.Frame(self.parent)
-        self.message_frame.pack(fill=tk.X, pady=(0, 25))
+        self.message_frame.pack(fill=tk.X, pady=(0, UIConstants.FRAME_PADDING))
         
         # Text widget
         self.message_text = tk.Text(

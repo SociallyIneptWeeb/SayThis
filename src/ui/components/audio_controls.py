@@ -31,7 +31,7 @@ class AudioControls:
             text=UIConstants.AUDIO_FRAME_TEXT, 
             padding=(10, 5)
         )
-        self.audio_frame.pack(fill=tk.X, pady=(15, 0), ipady=5)
+        self.audio_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=(15, 0), ipady=5)
         
         # Audio control buttons frame
         self.audio_buttons_frame = ttk.Frame(self.audio_frame)

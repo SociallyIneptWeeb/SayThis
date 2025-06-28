@@ -64,6 +64,18 @@ class EventHandler:
             return
         
         try:
+            # Stop and unload any currently playing audio
+            if self.is_playing:
+                pygame.mixer.music.stop()
+                self.is_playing = False
+            
+            # Unload any previously loaded audio to free resources
+            if pygame.mixer.music.get_busy() or pygame.mixer.get_init():
+                pygame.mixer.music.unload()
+            
+            # Reset audio controls to default state
+            self.audio_controls.set_stopped_state()
+            
             self.control_buttons.set_generate_enabled(False)
             self.status_label.set_status(
                 UIConstants.STATUS_GENERATING, 

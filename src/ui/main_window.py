@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from .constants import UIConstants
-from .components import MessageInput, ControlButtons, StatusLabel, AudioControls
+from .components import MessageInput, ControlButtons, StatusLabel, AudioControls, CharacterUsageLabel
 from .managers import WindowManager, MenuManager, EventHandler
 
 
@@ -25,14 +25,15 @@ class MainWindow:
         self._create_components()
         
         # Initialize managers that depend on components
-        self.menu_manager = MenuManager(self.root, self.app, self.status_label)
+        self.menu_manager = MenuManager(self.root, self.app, self.status_label, self._on_api_key_updated)
         self.event_handler = EventHandler(
             self.app,
             self.root,
             self.message_input, 
             self.control_buttons, 
             self.status_label, 
-            self.audio_controls
+            self.audio_controls,
+            self.character_usage_label
         )
         
         # Setup menu and window features
@@ -59,6 +60,7 @@ class MainWindow:
             self._on_generate, 
             self._on_clear
         )
+        self.character_usage_label = CharacterUsageLabel(self.main_frame)
         self.status_label = StatusLabel(self.main_frame)
         self.audio_controls = AudioControls(self.main_frame, self.status_label)
     
@@ -77,6 +79,14 @@ class MainWindow:
             event: The Configure event triggered by window resize
         """
         self.event_handler.on_window_resize(event)
+    
+    def refresh_character_usage(self):
+        """Refresh the character usage display."""
+        self.event_handler.load_character_usage()
+
+    def _on_api_key_updated(self):
+        """Handle API key being updated to refresh character usage."""
+        self.refresh_character_usage()
     
     def run(self):
         """Start the GUI main loop."""

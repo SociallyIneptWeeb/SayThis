@@ -1,4 +1,3 @@
-import uuid
 from pathlib import Path
 
 from elevenlabs.client import ElevenLabs
@@ -44,10 +43,7 @@ class TextToSpeech:
             output_format=tts_params["output_format"],
         )
         
-        audio_dir = Path(__file__).parent / "data" / "audio"
-        audio_dir.mkdir(parents=True, exist_ok=True)
-        
-        output_file = audio_dir / f"{uuid.uuid4()}{tts_params['file_extension']}"
+        output_file = Path(__file__).parent / 'data' / f"audio{tts_params['file_extension']}"
 
         try:
             # Write the audio stream to the file

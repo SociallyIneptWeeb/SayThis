@@ -62,7 +62,12 @@ class MainWindow:
         )
         self.character_usage_label = CharacterUsageLabel(self.main_frame)
         self.status_label = StatusLabel(self.main_frame)
-        self.audio_controls = AudioControls(self.main_frame, self.status_label)
+        self.audio_controls = AudioControls(
+            self.main_frame, 
+            self._on_play_audio, 
+            self._on_stop_audio, 
+            self._on_download_audio
+        )
     
     def _on_generate(self):
         """Handle generate button click."""
@@ -72,6 +77,18 @@ class MainWindow:
         """Handle clear button click."""
         self.event_handler.on_clear()
     
+    def _on_play_audio(self):
+        """Handle play audio button click."""
+        self.event_handler.on_play_audio()
+    
+    def _on_stop_audio(self):
+        """Handle stop audio button click."""
+        self.event_handler.on_stop_audio()
+    
+    def _on_download_audio(self):
+        """Handle download audio button click."""
+        self.event_handler.on_download_audio()
+
     def _on_window_resize(self, event):
         """Handle window resize event to update status label wrap length.
         

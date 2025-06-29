@@ -1,6 +1,5 @@
 """UI package for SayThis application."""
 
-from .main_window import MainWindow
+from .ui import UI
 
-# Export the MainWindow class as the main UI interface
-UI = MainWindow
+# Export the UI class as the main UI interface

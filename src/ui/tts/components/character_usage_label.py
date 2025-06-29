@@ -1,20 +1,28 @@
 import tkinter as tk
 from tkinter import ttk
-from ..constants import UIConstants
+from ...constants import UIConstants
 
 
 class CharacterUsageLabel:
-    """Component for displaying character usage information."""
+    """Component for displaying character usage information with integrated handling."""
     
-    def __init__(self, parent):
+    def __init__(self, parent, app, status_label):
         """Initialize the character usage label component.
         
         Args:
             parent: The parent widget to contain this component
+            app: The Application instance for fetching usage data
+            status_label: The status label component for displaying errors
         """
         self.parent = parent
+        self.app = app
+        self.status_label = status_label
         self.character_limit = None
         self._create_widgets()
+        
+        # Load initial character usage only if API key is configured
+        if self.app.get_api_key():
+            self.load_character_usage()
     
     def _create_widgets(self):
         """Create the character usage label widget."""
@@ -48,3 +56,21 @@ class CharacterUsageLabel:
     def set_error(self):
         """Set the label to show error state (same as loading)."""
         self.set_loading()
+    
+    def load_character_usage(self):
+        """Load and display character usage information."""
+        try:
+            character_count, character_limit = self.app.get_character_usage()
+            self.update_usage(character_count, character_limit)
+        except Exception as e:
+            self.set_error()
+            self.status_label.set_error(f"Unable to load character usage: {str(e)}")
+    
+    def schedule_usage_update(self, root, delay_ms=8000):
+        """Schedule a character usage update after a delay.
+        
+        Args:
+            root: The root widget for scheduling callbacks
+            delay_ms (int): Delay in milliseconds before updating
+        """
+        root.after(delay_ms, self.load_character_usage)

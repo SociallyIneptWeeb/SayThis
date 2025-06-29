@@ -75,10 +75,8 @@ class UIConstants:
     API_KEY_ENTRY_WIDTH = 50
     API_KEY_ENTRY_SHOW_CHAR = "*"
     
-    # Menu bar text
-    MENU_SETTINGS = "Settings"
-    MENU_API_KEY = "API Key..."
+    # API Key configuration text
     API_KEY_DIALOG_TITLE = "Configure API Key"
     API_KEY_DIALOG_LABEL = "Enter your ElevenLabs API Key:"
     API_KEY_SUCCESS_MESSAGE = "✅ API key updated successfully!"
-    API_KEY_REQUIRED_MESSAGE = "⚠️ Please configure an API key through Settings > API Key to generate audio."
+    API_KEY_REQUIRED_MESSAGE = "⚠️ Please configure an API key through Settings tab to generate audio."

@@ -7,16 +7,35 @@ class ConfigManager:
     
     def __init__(self):
         """Initialize the configuration manager."""
-        self.config_filepath = Path(__file__).parent / "data" / "config.json"
+        self.data_dir = Path(__file__).parent / "data"
+        self.config_filepath = self.data_dir / "config.json"
         
         # Default configuration
         self.default_config = {
-            "api_key": "",
-            "voice_id": "JBFqnCBsd6RMkjVDRZzb",
-            "model_id": "eleven_multilingual_v2",
-            "output_format": "mp3_22050_32",
-            "file_extension": ".mp3"
+            "selected_service": "ElevenLabs",
+            "ElevenLabs": {
+                "api_key": "",
+                "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+                "model_id": "eleven_turbo_v2_5",
+                "output_format": "mp3_22050_32",
+                "file_extension": ".mp3"
+            },
+            "IBM Watson": {
+                "api_key": "",
+                "file_extension": ".wav"
+            }
         }
+        self.selected_service = self.default_config["selected_service"]
+
+        self.load_config()
+
+    def get_data_dir(self):
+        """Get the data directory path.
+        
+        Returns:
+            Path: The data directory path
+        """
+        return self.data_dir
     
     def load_config(self):
         """Load configuration from file.
@@ -24,25 +43,24 @@ class ConfigManager:
         Returns:
             dict: Configuration dictionary
         """
-        default_config = self.default_config.copy()
         if not self.config_filepath.exists():
             # Create default config if file doesn't exist
             self.save_config(self.default_config)
-            return default_config
+            self.selected_service = self.default_config["selected_service"]
+            return self.default_config
         
         try:
             with open(self.config_filepath, 'r', encoding='utf-8') as f:
                 config = json.load(f)
             
-            # Merge with defaults to ensure all keys exist
-            merged_config = default_config
-            merged_config.update(config)
-            return merged_config
+            self.selected_service = config.get("selected_service")
+            return config
             
         except (json.JSONDecodeError, FileNotFoundError) as e:
             # If config file is corrupted, return defaults
             print(f"Warning: Could not load config file ({e}). Using defaults.")
-            return default_config
+            self.selected_service = self.default_config["selected_service"]
+            return self.default_config
     
     def save_config(self, config):
         """Save configuration to file.
@@ -52,56 +70,41 @@ class ConfigManager:
         """
         with open(self.config_filepath, 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=4)
-
-    def get_tts_parameters(self):
-        """Get all TTS parameters at once.
+    
+    def get_selected_service(self):
+        """Get the currently selected TTS service.
         
         Returns:
-            dict: Dictionary containing voice_id, model_id, output_format, and file_extension
+            str: The name of the selected service
+        """
+        return self.selected_service
+    
+    def set_selected_service(self, service):
+        """Set the selected TTS service.
+        
+        Args:
+            service (str): The service name to select ("ElevenLabs" or "IBM Watson")
         """
         config = self.load_config()
-        return {
-            "voice_id": config.get("voice_id"),
-            "model_id": config.get("model_id"),
-            "output_format": config.get("output_format"),
-            "file_extension": config.get("file_extension")
-        }
+        config["selected_service"] = service
+        self.selected_service = service
+        self.save_config(config)
 
-    def get_api_key(self):
-        """Get the API key from configuration.
-        
-        Returns:
-            str: The API key
-        """
-        return self.get_setting("api_key")
-    
-    def set_api_key(self, api_key):
-        """Set the API key in configuration.
-        
-        Args:
-            api_key (str): The API key to save
-        """
-        self.set_setting("api_key", api_key)
-    
-    def get_setting(self, key):
-        """Get a configuration setting.
-        
-        Args:
-            key (str): The configuration key
+    def get_service_config(self):
+        """Get configuration for the currently selected service.
             
         Returns:
-            The configuration value
+            dict: The service configuration
         """
         config = self.load_config()
-        return config.get(key)
+        return config.get(self.selected_service)
     
-    def set_setting(self, key, value):
-        """Set a configuration setting.
+    def set_service_config(self, service_config):
+        """Set configuration for the selected service.
         
         Args:
-            key (str): The configuration key
-            value: The value to set
+            service_config (dict): Configuration to set
         """
         config = self.load_config()
-        config[key] = value
+        config[self.selected_service] = service_config
         self.save_config(config)

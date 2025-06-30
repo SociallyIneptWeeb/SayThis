@@ -1,7 +1,14 @@
 {
-    "api_key": "",
-    "voice_id": "JBFqnCBsd6RMkjVDRZzb",
-    "model_id": "eleven_multilingual_v2",
-    "output_format": "mp3_22050_32",
-    "file_extension": ".mp3"
+    "selected_service": "ElevenLabs",
+    "ElevenLabs": {
+        "api_key": "",
+        "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+        "model_id": "eleven_flash_v2_5",
+        "output_format": "mp3_22050_32",
+        "file_extension": ".mp3"
+    },
+    "IBM Watson": {
+        "api_key": "",
+        "file_extension": ".wav"
+    }
 }

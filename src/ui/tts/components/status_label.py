@@ -18,14 +18,14 @@ class StatusLabel:
     def _create_widgets(self):
         """Create the status label widget."""
         # Status label
-        self.status_var = tk.StringVar(value=UIConstants.STATUS_READY)
+        self.status_var = tk.StringVar(value="Ready")
         self.status_label = ttk.Label(
             self.parent, 
             textvariable=self.status_var,
             foreground=UIConstants.STATUS_COLOR_READY,
             wraplength=UIConstants.DEFAULT_WRAP_LENGTH,
         )
-        self.status_label.pack(side=tk.BOTTOM, anchor=tk.W, pady=(10, 0), fill=tk.X)
+        self.status_label.pack(side=tk.TOP, anchor=tk.W, pady=(10, 0), fill=tk.X)
     
     def set_status(self, message, color="gray"):
         """Set the status message and color.
@@ -43,8 +43,7 @@ class StatusLabel:
         Args:
             error_message (str): The error message to display
         """
-        formatted_message = UIConstants.STATUS_ERROR.format(error_message)
-        self.set_status(formatted_message, UIConstants.STATUS_COLOR_ERROR)
+        self.set_status(f"❌ {error_message}", UIConstants.STATUS_COLOR_ERROR)
     
     def update_wrap_length(self, width):
         """Update the wrap length based on window width.

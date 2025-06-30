@@ -3,14 +3,14 @@ from tkinter import ttk
 
 from .constants import UIConstants
 from .tts import TTSTab
-from .settings_tab import SettingsWindow
+from .settings import SettingsTab
 
 
 class UI:
-    """Main tabbed UI class that contains the TTS functionality and other features."""
+    """Main UI class that contains the TTS tab and Settings tab."""
     
     def __init__(self, app):
-        """Initialize the main tabbed UI.
+        """Initialize the main UI.
         
         Args:
             app: The Application instance that this UI will control
@@ -25,15 +25,12 @@ class UI:
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # Create tabs
         self._create_tabs()
-        
-        # Center the window
         self._center_window()
     
     def _setup_window(self):
         """Configure the main window properties."""
-        self.root.title(UIConstants.WINDOW_TITLE)
+        self.root.title("SayThis - Text to Speech")
         self.root.geometry(f"{UIConstants.DEFAULT_WINDOW_WIDTH}x{UIConstants.DEFAULT_WINDOW_HEIGHT}")
         self.root.minsize(UIConstants.MIN_WINDOW_WIDTH, UIConstants.MIN_WINDOW_HEIGHT)
     
@@ -45,10 +42,9 @@ class UI:
 
         self.settings_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.settings_frame, text="Settings")
-        self.settings_tab = SettingsWindow(
+        self.settings_tab = SettingsTab(
             self.app, 
             parent=self.settings_frame,
-            on_api_key_updated=self.refresh_character_usage
         )
     
     def _center_window(self):
@@ -59,10 +55,6 @@ class UI:
         x = (self.root.winfo_screenwidth() // 2) - (width // 2)
         y = (self.root.winfo_screenheight() // 2) - (height // 2)
         self.root.geometry(f"{width}x{height}+{x}+{y}")
-    
-    def refresh_character_usage(self):
-        """Refresh the character usage display."""
-        self.tts_tab.refresh_character_usage()
     
     def run(self):
         """Start the GUI main loop."""

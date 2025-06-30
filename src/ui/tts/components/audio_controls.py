@@ -9,15 +9,15 @@ from ...constants import UIConstants
 class AudioControls:
     """Component for audio playback controls with integrated audio handling."""
     
-    def __init__(self, parent, status_label):
+    def __init__(self, parent, on_error):
         """Initialize the audio controls component.
         
         Args:
             parent: The parent widget to contain this component
-            status_label: The status label component for displaying messages
+            on_error: Callback function for playback error handling
         """
         self.parent = parent
-        self.status_label = status_label
+        self.on_error = on_error
         self.current_audio_file = None
         self.is_playing = False
         
@@ -31,10 +31,10 @@ class AudioControls:
         # Audio playback controls frame
         self.audio_frame = ttk.LabelFrame(
             self.parent, 
-            text=UIConstants.AUDIO_FRAME_TEXT, 
+            text="Audio Playback",
             padding=(10, 5)
         )
-        self.audio_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=(15, 0), ipady=5)
+        self.audio_frame.pack(side=tk.TOP, fill=tk.X)
         
         # Audio control buttons frame
         self.audio_buttons_frame = ttk.Frame(self.audio_frame)
@@ -43,7 +43,7 @@ class AudioControls:
         # Play button
         self.play_button = ttk.Button(
             self.audio_buttons_frame,
-            text=UIConstants.PLAY_BUTTON_TEXT,
+            text="▶️ Play",
             command=self._on_play,
             state=UIConstants.STATE_DISABLED
         )
@@ -52,7 +52,7 @@ class AudioControls:
         # Stop button
         self.stop_button = ttk.Button(
             self.audio_buttons_frame,
-            text=UIConstants.STOP_BUTTON_TEXT,
+            text="⏹️ Stop",
             command=self._on_stop,
             state=UIConstants.STATE_DISABLED
         )
@@ -61,14 +61,15 @@ class AudioControls:
         # Download button
         self.download_button = ttk.Button(
             self.audio_buttons_frame,
-            text=UIConstants.DOWNLOAD_BUTTON_TEXT,
+            text="📥 Download",
             command=self._on_download,
-            state=UIConstants.STATE_DISABLED
+            state=UIConstants.STATE_DISABLED,
+            width=15
         )
         self.download_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
         
         # Audio file label
-        self.audio_file_var = tk.StringVar(value=UIConstants.DEFAULT_AUDIO_FILE_STATUS)
+        self.audio_file_var = tk.StringVar(value="No audio file generated yet")
         self.audio_file_label = ttk.Label(
             self.audio_frame,
             textvariable=self.audio_file_var,
@@ -87,14 +88,6 @@ class AudioControls:
         self.audio_file_var.set(self.current_audio_file.name)
         self.play_button.configure(state=UIConstants.STATE_NORMAL)
         self.download_button.configure(state=UIConstants.STATE_NORMAL)
-    
-    def get_audio_file(self):
-        """Get the current audio file path.
-        
-        Returns:
-            Path: The current audio file path or None
-        """
-        return self.current_audio_file
     
     def set_playing_state(self):
         """Set the controls to playing state."""
@@ -115,25 +108,22 @@ class AudioControls:
                 
                 # Update UI state
                 self.set_playing_state()
-                self.status_label.set_status(UIConstants.STATUS_PLAYING, UIConstants.STATUS_COLOR_PROCESSING)
                 
                 # Set playing flag and start monitoring playback
                 self.is_playing = True
                 self._monitor_playback()
             except Exception as e:
-                self.status_label.set_error(f"Error playing audio: {str(e)}")
-        else:
-            self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, UIConstants.STATUS_COLOR_WARNING)
+                self._reset_audio_controls()
+                self.on_error(f"Audio playback error: {str(e)}")
     
     def _on_stop(self):
         """Handle stop button click."""
         pygame.mixer.music.stop()
-        self._reset_audio_controls(UIConstants.STATUS_STOPPED)
+        self._reset_audio_controls()
     
     def _on_download(self):
         """Handle download button click."""
         if not self.current_audio_file or not self.current_audio_file.exists():
-            self.status_label.set_status(UIConstants.STATUS_NO_AUDIO_FILE, UIConstants.STATUS_COLOR_WARNING)
             return
         
         # Get the file extension from the current audio file
@@ -153,12 +143,8 @@ class AudioControls:
             try:
                 # Copy the file to the selected location
                 shutil.copy2(self.current_audio_file, save_path)
-                self.status_label.set_status(UIConstants.STATUS_DOWNLOAD_SUCCESS, UIConstants.STATUS_COLOR_SUCCESS)
             except Exception as e:
-                self.status_label.set_error(f"Error downloading audio: {str(e)}")
-        else:
-            # User cancelled the download
-            self.status_label.set_status(UIConstants.STATUS_DOWNLOAD_CANCELLED, UIConstants.STATUS_COLOR_READY)
+                self.on_error(f"Download failed: {str(e)}")
     
     def stop_and_unload_audio(self):
         """Stop and unload any currently playing audio."""
@@ -173,23 +159,10 @@ class AudioControls:
         # Reset audio controls to default state
         self.set_stopped_state()
     
-    def _reset_audio_controls(self, status_message):
-        """Reset audio control states and playing flag with status update.
-        
-        Args:
-            status_message (str): Status message to display
-        """
+    def _reset_audio_controls(self):
+        """Reset audio control states and playing flag."""
         self.is_playing = False
         self.set_stopped_state()
-        self.status_label.set_status(status_message, UIConstants.STATUS_COLOR_READY)
-    
-    def is_audio_playing(self):
-        """Check if audio is currently playing.
-        
-        Returns:
-            bool: True if audio is playing, False otherwise
-        """
-        return self.is_playing and pygame.mixer.music.get_busy()
     
     def _monitor_playback(self):
         """Monitor audio playback and reset control states when finished."""
@@ -197,7 +170,7 @@ class AudioControls:
             # Check if audio is still playing
             if not pygame.mixer.music.get_busy():
                 # Audio has finished playing naturally
-                self._reset_audio_controls(UIConstants.STATUS_READY)
+                self._reset_audio_controls()
             else:
                 # Audio is still playing, check again after the monitoring interval
                 self.parent.after(UIConstants.AUDIO_MONITOR_INTERVAL_MS, self._monitor_playback)
@@ -208,4 +181,3 @@ class AudioControls:
         if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
             pygame.mixer.music.stop()
         pygame.mixer.quit()
-

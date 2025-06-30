@@ -1,6 +1,8 @@
 # SayThis
 A simple Python GUI App that generates audio from text using TTS
 
+![SayThis TTS Tab](docs/tts_tab.png)
+
 ## Setup
 
 ### Step 1: Download the Application
@@ -29,8 +31,9 @@ A simple Python GUI App that generates audio from text using TTS
 
 ### Add API Key to SayThis App
 
-1. Click on **Settings** in the Menu bar
-2. Click on **API Key…**
-3. Paste your copied ElevenLabs API Key into the input field and click **OK**
+1. Open the SayThis application
+2. Click on the **Settings** tab
+3. Paste your copied ElevenLabs API Key into the API Key input field
+4. Click the **Save Settings** button
 
-You're now ready to use SayThis! Simply enter your text and generate high-quality audio using ElevenLabs' text-to-speech API.
+You're now ready to use SayThis! Simply switch back to the TTS tab, enter your text and generate high-quality audio using ElevenLabs' text-to-speech API.

@@ -16,7 +16,7 @@ A simple Python GUI App that generates audio from text using TTS
 ### Step 2: Extract and Run
 
 1. Extract the downloaded ZIP file to a folder of your choice
-2. Navigate into the extracted folder (there will be a nested folder inside)
+2. Navigate into the extracted folder
 3. Double-click on `SayThis.exe` to run the application
 
 ## Configure Your API Key

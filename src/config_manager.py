@@ -7,8 +7,11 @@ class ConfigManager:
     
     def __init__(self):
         """Initialize the configuration manager."""
-        self.data_dir = Path(__file__).parent / "data"
+        self.data_dir = Path.home() / ".saythis"
         self.config_filepath = self.data_dir / "config.json"
+        
+        # Ensure the data directory exists
+        self.data_dir.mkdir(exist_ok=True)
         
         # Default configuration
         self.default_config = {

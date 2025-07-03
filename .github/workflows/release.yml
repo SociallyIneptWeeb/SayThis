@@ -24,7 +24,7 @@ jobs:
       run: pip install -r requirements.txt pyinstaller
 
     - name: Build executable
-      run: pyinstaller --add-data "src/data:data" src/main.py --noconsole --name=SayThis-${{ runner.os }}
+      run: pyinstaller src/main.py --onefile --noconsole --name=SayThis-${{ runner.os }}
 
     - name: Zip dist folder (Windows)
       if: runner.os == 'Windows'

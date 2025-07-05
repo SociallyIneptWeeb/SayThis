@@ -18,7 +18,7 @@ class ConfigManager:
             "selected_service": "ElevenLabs",
             "ElevenLabs": {
                 "api_key": "",
-                "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+                "voice_id": "yj30vwTGJxSHezdAGsv9",
                 "model_id": "eleven_turbo_v2_5",
                 "output_format": "mp3_22050_32",
                 "file_extension": ".mp3"

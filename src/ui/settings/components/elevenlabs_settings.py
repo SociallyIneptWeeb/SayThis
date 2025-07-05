@@ -74,6 +74,33 @@ class ElevenLabsSettings:
             width=38
         )
         self.model_id_dropdown.pack(anchor=tk.W)
+        
+        # Output Format Configuration Section
+        output_frame = ttk.Frame(self.frame)
+        output_frame.pack(pady=10, fill=tk.X)
+        
+        # Output Format label and dropdown
+        ttk.Label(output_frame, text="Output Format:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        
+        # Output Format dropdown field
+        self.output_format_var = tk.StringVar()
+        self.output_format_dropdown = ttk.Combobox(
+            output_frame,
+            textvariable=self.output_format_var,
+            values=[
+                "mp3_22050_32",
+                "mp3_44100_32",
+                "mp3_44100_64",
+                "mp3_44100_96",
+                "mp3_44100_128",
+                "mp3_44100_192"
+            ],
+            state="readonly",
+            font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
+            width=38
+        )
+        self.output_format_dropdown.pack(anchor=tk.W)
     
     def pack(self, **kwargs):
         """Pack the component frame."""
@@ -88,7 +115,8 @@ class ElevenLabsSettings:
         config = self.app.get_service_config()
         self.api_key_var.set(config.get("api_key", ""))
         self.voice_id_var.set(config.get("voice_id", ""))
-        self.model_id_var.set(config.get("model_id", "eleven_multilingual_v2"))
+        self.model_id_var.set(config.get("model_id", "eleven_turbo_v2_5"))
+        self.output_format_var.set(config.get("output_format", "mp3_22050_32"))
     
     def get_settings(self):
         """Get the current settings from the UI.
@@ -100,6 +128,6 @@ class ElevenLabsSettings:
             "api_key": self.api_key_var.get(),
             "voice_id": self.voice_id_var.get(),
             "model_id": self.model_id_var.get(),
-            "output_format": "mp3_22050_32",  # Keep existing format
-            "file_extension": ".mp3"  # Keep existing extension
+            "output_format": self.output_format_var.get(),
+            "file_extension": ".mp3"
         }

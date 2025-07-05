@@ -1,13 +1,12 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 from ..constants import UIConstants
 from .components import (
     CharacterUsageLabel, 
     ServiceSelector, 
     ElevenLabsSettings, 
-    IBMWatsonSettings, 
-    SaveButton
+    IBMWatsonSettings
 )
 
 
@@ -113,7 +112,13 @@ class SettingsTab:
         save_frame = ttk.Frame(self.scrollable_frame)
         save_frame.pack(pady=10, padx=20, fill=tk.X)
         
-        self.save_button = SaveButton(save_frame, self._on_save_settings)
+        self.save_button = ttk.Button(
+            save_frame,
+            text="Save Settings",
+            command=self._on_save_settings,
+            width=20,
+        )
+        self.save_button.pack(anchor=tk.CENTER)
 
         # Bind mouse wheel to all child widgets after creation
         bind_mousewheel(self.scrollable_frame)
@@ -154,8 +159,8 @@ class SettingsTab:
                 self.app.set_service_config(config)
                         
             self.character_usage.load_character_usage()
-            self.save_button.show_dialog("Settings saved successfully!")
+            messagebox.showinfo("Success", "Settings saved successfully!")
 
         except Exception as e:
             # Handle save error
-            self.save_button.show_dialog(f"Error saving settings: {str(e)}", is_error=True)
+            messagebox.showerror("Error", f"Error saving settings: {str(e)}")

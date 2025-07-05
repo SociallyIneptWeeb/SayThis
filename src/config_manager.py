@@ -32,6 +32,31 @@ class ConfigManager:
 
         self.load_config()
 
+    def _merge_with_defaults(self, loaded_config):
+        """Merge loaded config with default config for backwards compatibility.
+        
+        Args:
+            loaded_config (dict): The configuration loaded from file
+            
+        Returns:
+            dict: Merged configuration with defaults filled in
+        """
+        def deep_merge(default, loaded):
+            """Recursively merge two dictionaries."""
+            merged = default.copy()
+            
+            for key, value in loaded.items():
+                if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
+                    # Recursively merge nested dictionaries
+                    merged[key] = deep_merge(merged[key], value)
+                else:
+                    # Use loaded value for non-dict values or new keys
+                    merged[key] = value
+            
+            return merged
+        
+        return deep_merge(self.default_config, loaded_config)
+
     def get_data_dir(self):
         """Get the data directory path.
         
@@ -56,8 +81,15 @@ class ConfigManager:
             with open(self.config_filepath, 'r', encoding='utf-8') as f:
                 config = json.load(f)
             
-            self.selected_service = config.get("selected_service")
-            return config
+            # Merge with defaults for backwards compatibility
+            merged_config = self._merge_with_defaults(config)
+            
+            # Save the merged config if it was updated
+            if merged_config != config:
+                self.save_config(merged_config)
+
+            self.selected_service = merged_config["selected_service"]
+            return merged_config
             
         except (json.JSONDecodeError, FileNotFoundError) as e:
             # If config file is corrupted, return defaults

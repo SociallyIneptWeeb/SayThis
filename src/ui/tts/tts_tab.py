@@ -33,6 +33,9 @@ class TTSTab:
         self.control_buttons = ControlButtons(self.tts_frame, self._handle_generate, self._handle_clear)
         self.audio_controls = AudioControls(self.tts_frame, self._handle_audio_error)
         self.status_label = StatusLabel(self.tts_frame)
+        
+        # Bind window resize event to update text wrapping
+        self.tts_frame.bind("<Configure>", self._on_frame_configure)
     
     def on_close(self):
         """Clean up resources."""
@@ -89,3 +92,12 @@ class TTSTab:
             error_message (str): The error message to display
         """
         self.status_label.set_error(error_message)
+
+    def _on_frame_configure(self, event):
+        """Handle the frame configure event to update text wrapping.
+        
+        Args:
+            event: The configure event
+        """
+        if event.widget == self.tts_frame:
+            self.status_label.update_wrap_length(event.width - UIConstants.WINDOW_PADDING_ADJUST)

@@ -117,8 +117,8 @@ class ElevenLabsSettings:
         
         # Add tooltip to the stability label
         ToolTip(stability_label, "Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion.")
-        
-        self.stability_var = tk.DoubleVar()
+
+        self.stability_var = tk.DoubleVar(value=0.5)
         self.stability_scale = ttk.Scale(
             stability_frame,
             from_=0.0,
@@ -145,7 +145,7 @@ class ElevenLabsSettings:
         # Add tooltip to the similarity boost label
         ToolTip(similarity_label, "Determines how closely the AI should adhere to the original voice when attempting to replicate it.")
         
-        self.similarity_boost_var = tk.DoubleVar()
+        self.similarity_boost_var = tk.DoubleVar(value=0.75)
         self.similarity_boost_scale = ttk.Scale(
             similarity_frame,
             from_=0.0,
@@ -171,8 +171,8 @@ class ElevenLabsSettings:
         
         # Add tooltip to the style label
         ToolTip(style_label, "Determines the style exaggeration of the voice. This setting attempts to amplify the style of the original speaker. It does consume additional computational resources and might increase latency if set to anything other than 0.")
-        
-        self.style_var = tk.DoubleVar()
+
+        self.style_var = tk.DoubleVar(value=0.0)
         self.style_scale = ttk.Scale(
             style_frame,
             from_=0.0,
@@ -198,8 +198,8 @@ class ElevenLabsSettings:
         
         # Add tooltip to the speed label
         ToolTip(speed_label, "Adjusts the speed of the voice. A value of 1.0 is the default speed, while values less than 1.0 slow down the speech, and values greater than 1.0 speed it up.")
-        
-        self.speed_var = tk.DoubleVar()
+
+        self.speed_var = tk.DoubleVar(value=1.0)
         self.speed_scale = ttk.Scale(
             speed_frame,
             from_=0.7,
@@ -218,8 +218,8 @@ class ElevenLabsSettings:
         # Use Speaker Boost checkbox
         speaker_boost_frame = ttk.Frame(voice_settings_frame)
         speaker_boost_frame.pack(pady=5, fill=tk.X)
-        
-        self.use_speaker_boost_var = tk.BooleanVar()
+
+        self.use_speaker_boost_var = tk.BooleanVar(value=True)
         self.use_speaker_boost_checkbox = ttk.Checkbutton(
             speaker_boost_frame,
             text="Use Speaker Boost",

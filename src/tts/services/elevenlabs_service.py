@@ -57,6 +57,7 @@ class ElevenLabsService:
                 voice_id=tts_params.get("voice_id"),
                 model_id=tts_params.get("model_id"),
                 output_format=tts_params.get("output_format"),
+                voice_settings=tts_params.get("voice_settings")
             )
 
             # Write the audio stream to the file

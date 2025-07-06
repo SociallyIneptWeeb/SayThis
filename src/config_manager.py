@@ -21,7 +21,14 @@ class ConfigManager:
                 "voice_id": "yj30vwTGJxSHezdAGsv9",
                 "model_id": "eleven_turbo_v2_5",
                 "output_format": "mp3_22050_32",
-                "file_extension": ".mp3"
+                "file_extension": ".mp3",
+                "voice_settings": {
+                    "stability": 0.5,
+                    "similarity_boost": 0.75,
+                    "style": 0.0,
+                    "use_speaker_boost": True,
+                    "speed": 1.0
+                }
             },
             "IBM Watson": {
                 "api_key": "",

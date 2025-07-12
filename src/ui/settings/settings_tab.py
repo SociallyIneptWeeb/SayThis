@@ -6,7 +6,7 @@ from .components import (
     CharacterUsageLabel, 
     ServiceSelector, 
     ElevenLabsSettings, 
-    IBMWatsonSettings
+    GoogleCloudSettings
 )
 
 
@@ -106,7 +106,7 @@ class SettingsTab:
         
         # Create settings components for each service
         self.elevenlabs_settings = ElevenLabsSettings(self.settings_container, self.app)
-        self.ibm_watson_settings = IBMWatsonSettings(self.settings_container, self.app)
+        self.google_cloud_settings = GoogleCloudSettings(self.settings_container, self.app)
         
         # Save button at the bottom
         save_frame = ttk.Frame(self.scrollable_frame)
@@ -135,7 +135,7 @@ class SettingsTab:
         """Show settings for the selected TTS service."""
         # Hide all service frames
         self.elevenlabs_settings.pack_forget()
-        self.ibm_watson_settings.pack_forget()
+        self.google_cloud_settings.pack_forget()
         
         self.character_usage.load_character_usage()
 
@@ -143,9 +143,9 @@ class SettingsTab:
         if service == "ElevenLabs":
             self.elevenlabs_settings.load_settings()
             self.elevenlabs_settings.pack(fill=tk.BOTH, expand=True)
-        elif service == "IBM Watson":
-            self.ibm_watson_settings.load_settings()
-            self.ibm_watson_settings.pack(fill=tk.BOTH, expand=True)
+        elif service == "Google Cloud":
+            self.google_cloud_settings.load_settings()
+            self.google_cloud_settings.pack(fill=tk.BOTH, expand=True)
     
     def _on_save_settings(self):
         """Handle save settings button click."""
@@ -154,8 +154,8 @@ class SettingsTab:
             if service == "ElevenLabs":
                 config = self.elevenlabs_settings.get_settings()
                 self.app.set_service_config(config)
-            elif service == "IBM Watson":
-                config = self.ibm_watson_settings.get_settings()
+            elif service == "Google Cloud":
+                config = self.google_cloud_settings.get_settings()
                 self.app.set_service_config(config)
                         
             self.character_usage.load_character_usage()

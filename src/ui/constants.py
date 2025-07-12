@@ -36,6 +36,7 @@ class UIConstants:
     # Character usage labels
     UNSET_USAGE = "--"
     CHARACTER_USAGE_FORMAT = "Used: {} / {} characters"
+    CHARACTER_USAGE_NOT_AVAILABLE = "Usage tracking not available for this service"
     
     # Entry widget settings
     API_KEY_ENTRY_SHOW_CHAR = "*"

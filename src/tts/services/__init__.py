@@ -1,4 +1,4 @@
 from .elevenlabs_service import ElevenLabsService
-from .ibm_watson_service import IBMWatsonService
+from .google_cloud_service import GoogleCloudService
 
-__all__ = ['ElevenLabsService', 'IBMWatsonService']
+__all__ = ['ElevenLabsService', 'GoogleCloudService']

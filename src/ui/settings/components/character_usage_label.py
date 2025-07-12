@@ -16,12 +16,9 @@ class CharacterUsageLabel:
         self.parent = parent
         self.app = app
         self.character_limit = None
+        self.refresh_button = None
+        self.button_frame = None
         self._create_widgets()
-    
-    def _has_api_key(self):
-        """Check if the current service has an API key configured."""
-        config = self.app.get_service_config()
-        return bool(config.get("api_key", "").strip())
   
     def _create_widgets(self):
         """Create the character usage label widget and refresh button."""
@@ -46,6 +43,14 @@ class CharacterUsageLabel:
         )
         self.refresh_button.pack(side=tk.LEFT, anchor=tk.W)
 
+    def _show_refresh_button(self):
+        """Show the refresh button."""
+        self.button_frame.pack(anchor=tk.W, pady=(UIConstants.BUTTON_PADDING, 0), fill=tk.X)
+
+    def _hide_refresh_button(self):
+        """Hide the refresh button."""
+        self.button_frame.pack_forget()
+
     def set_label(self, message, color="black"):
         """Set the label text and color."""
         self.usage_var.set(message)
@@ -62,18 +67,23 @@ class CharacterUsageLabel:
 
     def load_character_usage(self):
         """Load and display character usage information."""
-        if not self._has_api_key():
+        if not self.app.is_service_initialized():
             self.character_limit = None
-            self.set_label(UIConstants.CHARACTER_USAGE_FORMAT.format(
-                UIConstants.UNSET_USAGE,
-                self.character_limit if self.character_limit else UIConstants.UNSET_USAGE
-            ))
+            self.set_label(UIConstants.CHARACTER_USAGE_FORMAT.format(UIConstants.UNSET_USAGE, UIConstants.UNSET_USAGE))
             return
 
         try:
             character_count, character_limit = self.app.get_character_usage()
-            usage_text = UIConstants.CHARACTER_USAGE_FORMAT.format(character_count, character_limit)
-            self.set_label(usage_text)
-            self.character_limit = character_limit
+            
+            # Handle case where usage tracking is not available
+            if character_count == -1 and character_limit == -1:
+                self.set_label(UIConstants.CHARACTER_USAGE_NOT_AVAILABLE, color="gray")
+                self._hide_refresh_button()
+            else:
+                usage_text = UIConstants.CHARACTER_USAGE_FORMAT.format(character_count, character_limit)
+                self.set_label(usage_text)
+                self.character_limit = character_limit
+                self._show_refresh_button()
         except Exception as e:
             self.set_label(f"Error loading usage: {str(e)}", color="red")
+            self._show_refresh_button()

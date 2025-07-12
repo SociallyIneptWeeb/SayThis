@@ -1,8 +1,9 @@
 from elevenlabs.client import ElevenLabs
 from elevenlabs.core.api_error import ApiError
+from .base_service import BaseTTSService
 
 
-class ElevenLabsService:
+class ElevenLabsService(BaseTTSService):
     """Service class for ElevenLabs text-to-speech functionality."""
     
     def __init__(self, config_manager):
@@ -11,15 +12,16 @@ class ElevenLabsService:
         Args:
             config_manager (ConfigManager): The configuration manager instance.
         """
-        self.config_manager = config_manager
-        self.client = None
-        self._initialize_client()
+        super().__init__(config_manager)
     
     def _initialize_client(self):
         """Initialize the ElevenLabs client with API key."""
         service_config = self.config_manager.get_service_config()
         api_key = service_config.get("api_key")
-        self.client = ElevenLabs(api_key=api_key)
+        if not api_key:
+            self.client = None
+        else:
+            self.client = ElevenLabs(api_key=api_key)
     
     def get_character_usage(self):
         """Get character usage from ElevenLabs.
@@ -48,8 +50,11 @@ class ElevenLabsService:
         Raises:
             RuntimeError: If there's an error during synthesis.
         """
+        if not self.is_initialized():
+            raise RuntimeError("ElevenLabs client not initialized. Please check your API key.")
+        
         tts_params = self.config_manager.get_service_config()
-        output_file = self.config_manager.get_data_dir() / f"audio{tts_params.get('file_extension')}"
+        output_file = self.get_output_file_path()
 
         try:
             audio = self.client.text_to_speech.convert(
@@ -67,7 +72,7 @@ class ElevenLabsService:
                         f.write(chunk)
                         
         except ApiError as e:
-            output_file.unlink(missing_ok=True)
+            self.cleanup_output_file(output_file)
             raise RuntimeError(e.body['detail']['message'])
 
         return output_file

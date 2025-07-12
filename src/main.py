@@ -55,6 +55,14 @@ class Application:
         self.config_manager.set_selected_service(service)
         self.tts_engine.initialize_service()
 
+    def is_service_initialized(self):
+        """Check if the current TTS service client is properly initialized.
+        
+        Returns:
+            bool: True if the service client is initialized, False otherwise.
+        """
+        return self.tts_engine.is_service_initialized()
+
     def get_service_config(self):
         """Get the configuration for the currently selected TTS service.
         

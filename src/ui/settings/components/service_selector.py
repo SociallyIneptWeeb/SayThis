@@ -29,7 +29,7 @@ class ServiceSelector:
         self.service_dropdown = ttk.Combobox(
             self.parent,
             textvariable=self.service_var,
-            values=["ElevenLabs"],
+            values=["ElevenLabs", "Google Cloud"],
             state="readonly",
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)
         )

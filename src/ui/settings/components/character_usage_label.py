@@ -16,8 +16,6 @@ class CharacterUsageLabel:
         self.parent = parent
         self.app = app
         self.character_limit = None
-        self.refresh_button = None
-        self.button_frame = None
         self._create_widgets()
   
     def _create_widgets(self):

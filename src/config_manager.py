@@ -30,9 +30,16 @@ class ConfigManager:
                     "speed": 1.0
                 }
             },
-            "IBM Watson": {
-                "api_key": "",
-                "file_extension": ".wav"
+            "Google Cloud": {
+                "service_account_json_path": "",
+                "language_code": "en-US",
+                "voice_name": "en-US-Wavenet-D",
+                "voice_gender": "NEUTRAL",
+                "audio_encoding": "MP3",
+                "speaking_rate": 1.0,
+                "pitch": 0.0,
+                "volume_gain_db": 0.0,
+                "file_extension": ".mp3"
             }
         }
         self.selected_service = self.default_config["selected_service"]
@@ -125,7 +132,7 @@ class ConfigManager:
         """Set the selected TTS service.
         
         Args:
-            service (str): The service name to select ("ElevenLabs" or "IBM Watson")
+            service (str): The service name to select ("ElevenLabs" or "Google Cloud")
         """
         config = self.load_config()
         config["selected_service"] = service

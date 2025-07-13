@@ -1,5 +1,4 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
 
 from ..constants import UIConstants
 from .components import MessageInput, ControlButtons, StatusLabel, AudioControls
@@ -22,12 +21,11 @@ class TTSTab:
     
     def _create_components(self):
         """Create and layout all UI components."""
-        self.tts_frame = ttk.Frame(
+        self.tts_frame = customtkinter.CTkFrame(
             self.root,
-            padding=f"{UIConstants.FRAME_PADDING} {UIConstants.FRAME_PADDING} "
-                    f"{UIConstants.FRAME_PADDING} {UIConstants.FRAME_PADDING}"
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.tts_frame.pack(fill=tk.BOTH, expand=True)
+        self.tts_frame.pack(fill=customtkinter.BOTH, expand=True, padx=UIConstants.FRAME_PADDING, pady=UIConstants.FRAME_PADDING)
         
         self.message_input = MessageInput(self.tts_frame)
         self.control_buttons = ControlButtons(self.tts_frame, self._handle_generate, self._handle_clear)
@@ -101,3 +99,5 @@ class TTSTab:
         """
         if event.widget == self.tts_frame:
             self.status_label.update_wrap_length(event.width - UIConstants.WINDOW_PADDING_ADJUST)
+
+

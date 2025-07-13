@@ -1,5 +1,4 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
 
 from .constants import UIConstants
 from .tts import TTSTab
@@ -18,12 +17,12 @@ class UI:
         self.app = app
         
         # Create the main window
-        self.root = tk.Tk()
+        self.root = customtkinter.CTk()
         self._setup_window()
         
         # Create the notebook (tab container)
-        self.notebook = ttk.Notebook(self.root)
-        self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        self.notebook = customtkinter.CTkTabview(self.root)
+        self.notebook.pack(fill=customtkinter.BOTH, expand=True, padx=10, pady=10)
         
         self._create_tabs()
         self._center_window()
@@ -36,12 +35,10 @@ class UI:
     
     def _create_tabs(self):
         """Create all tabs for the application."""
-        self.tts_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.tts_frame, text="Text to Speech")
+        self.tts_frame = self.notebook.add("Text to Speech")
         self.tts_tab = TTSTab(self.app, parent=self.tts_frame)
 
-        self.settings_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.settings_frame, text="Settings")
+        self.settings_frame = self.notebook.add("Settings")
         self.settings_tab = SettingsTab(
             self.app, 
             parent=self.settings_frame,
@@ -65,3 +62,5 @@ class UI:
         """Clean up resources and close the application."""
         self.tts_tab.on_close()
         self.root.destroy()
+
+

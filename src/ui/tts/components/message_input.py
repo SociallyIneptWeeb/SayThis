@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
+
 from ...constants import UIConstants
 
 
@@ -17,32 +17,20 @@ class MessageInput:
     
     def _create_widgets(self):
         """Create the message input widgets."""
-        self.message_label = ttk.Label(
+        self.message_label = customtkinter.CTkLabel(
             self.parent, 
             text="Enter your message:",
         )
-        self.message_label.pack(side=tk.TOP, anchor=tk.W, pady=(0, 5))
+        self.message_label.pack(side=customtkinter.TOP, anchor=customtkinter.W, pady=(0, 5))
         
-        self.message_frame = ttk.Frame(self.parent)
-        self.message_frame.pack(side=tk.TOP, fill=tk.X, pady=(0, UIConstants.FRAME_PADDING))
-        
-        self.message_text = tk.Text(
-            self.message_frame, 
+        self.message_text = customtkinter.CTkTextbox(
+            self.parent, 
             height=4,
-            width=50,
-            wrap=tk.WORD,
+            wrap="word",
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            padx=UIConstants.TEXT_PADDING,
-            pady=UIConstants.TEXT_PADDING
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.message_text.pack(fill=tk.X, expand=True, side=tk.LEFT)
-        
-        self.scrollbar = ttk.Scrollbar(
-            self.message_frame, 
-            command=self.message_text.yview
-        )
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.message_text.config(yscrollcommand=self.scrollbar.set)
+        self.message_text.pack(fill=customtkinter.BOTH, expand=True, pady=(0, UIConstants.FRAME_PADDING))
         
         self.message_text.focus_set()
     
@@ -52,11 +40,11 @@ class MessageInput:
         Returns:
             str: The text content without trailing newline
         """
-        return self.message_text.get("1.0", "end-1c")
+        return self.message_text.get("1.0", "end")
     
     def clear_text(self):
         """Clear the text input field."""
-        self.message_text.delete("1.0", tk.END)
+        self.message_text.delete("1.0", "end")
         self.message_text.focus_set()
     
     def is_empty(self):
@@ -66,3 +54,5 @@ class MessageInput:
             bool: True if empty or whitespace only
         """
         return not self.get_text().strip()
+
+

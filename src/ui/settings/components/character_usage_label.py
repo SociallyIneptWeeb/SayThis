@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
+
 from ...constants import UIConstants
 
 
@@ -20,30 +20,32 @@ class CharacterUsageLabel:
   
     def _create_widgets(self):
         """Create the character usage label widget and refresh button."""
-        self.usage_frame = ttk.Frame(self.parent)
-        self.usage_frame.pack(anchor=tk.W, pady=(UIConstants.TEXT_PADDING, 0), fill=tk.X)
+        self.usage_frame = customtkinter.CTkFrame(self.parent, fg_color="transparent")
+        self.usage_frame.pack(anchor=customtkinter.W, pady=(UIConstants.TEXT_PADDING, 0), fill=customtkinter.X)
         
-        self.usage_var = tk.StringVar()
-        self.usage_label = ttk.Label(
+        self.usage_var = customtkinter.StringVar()
+        self.usage_label = customtkinter.CTkLabel(
             self.usage_frame, 
             textvariable=self.usage_var,
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
+            anchor="w",
         )
-        self.usage_label.pack(side=tk.LEFT, anchor=tk.W)
+        self.usage_label.pack(side=customtkinter.LEFT, anchor=customtkinter.W)
         
-        self.button_frame = ttk.Frame(self.parent)
-        self.button_frame.pack(anchor=tk.W, pady=(UIConstants.BUTTON_PADDING, 0), fill=tk.X)
+        self.button_frame = customtkinter.CTkFrame(self.parent, fg_color="transparent")
+        self.button_frame.pack(anchor=customtkinter.W, pady=(UIConstants.BUTTON_PADDING, 0), fill=customtkinter.X)
         
-        self.refresh_button = ttk.Button(
+        self.refresh_button = customtkinter.CTkButton(
             self.button_frame,
             text="Refresh Usage",
-            command=self._refresh_usage
+            command=self._refresh_usage,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.refresh_button.pack(side=tk.LEFT, anchor=tk.W)
+        self.refresh_button.pack(side=customtkinter.LEFT, anchor=customtkinter.W)
 
     def _show_refresh_button(self):
         """Show the refresh button."""
-        self.button_frame.pack(anchor=tk.W, pady=(UIConstants.BUTTON_PADDING, 0), fill=tk.X)
+        self.button_frame.pack(anchor=customtkinter.W, pady=(UIConstants.BUTTON_PADDING, 0), fill=customtkinter.X)
 
     def _hide_refresh_button(self):
         """Hide the refresh button."""
@@ -52,7 +54,7 @@ class CharacterUsageLabel:
     def set_label(self, message, color="black"):
         """Set the label text and color."""
         self.usage_var.set(message)
-        self.usage_label.config(foreground=color)
+        self.usage_label.configure(text_color=color)
 
     def _refresh_usage(self):
         """Refresh character usage with loading state."""
@@ -85,3 +87,5 @@ class CharacterUsageLabel:
         except Exception as e:
             self.set_label(f"Error loading usage: {str(e)}", color="red")
             self._show_refresh_button()
+
+

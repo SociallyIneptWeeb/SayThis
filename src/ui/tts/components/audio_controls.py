@@ -1,5 +1,4 @@
-import tkinter as tk
-from tkinter import ttk, filedialog
+import customtkinter
 import pygame
 import shutil
 from pathlib import Path
@@ -29,54 +28,64 @@ class AudioControls:
     def _create_widgets(self):
         """Create the audio control widgets."""
         # Audio playback controls frame
-        self.audio_frame = ttk.LabelFrame(
+        self.audio_frame = customtkinter.CTkFrame(
             self.parent, 
-            text="Audio Playback",
-            padding=(10, 5)
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.audio_frame.pack(side=tk.TOP, fill=tk.X)
+        self.audio_frame.pack(side=customtkinter.TOP, fill=customtkinter.X, pady=(10, 0), padx=UIConstants.FRAME_PADDING)
         
+        self.audio_label = customtkinter.CTkLabel(
+            self.audio_frame,
+            text="Audio Playback",
+            font=customtkinter.CTkFont(weight="bold"),
+        )
+        self.audio_label.pack(side=customtkinter.TOP, anchor=customtkinter.W, padx=10, pady=(5, 0))
+
         # Audio control buttons frame
-        self.audio_buttons_frame = ttk.Frame(self.audio_frame)
-        self.audio_buttons_frame.pack(fill=tk.X, expand=True)
+        self.audio_buttons_frame = customtkinter.CTkFrame(self.audio_frame, fg_color="transparent")
+        self.audio_buttons_frame.pack(fill=customtkinter.X, expand=True, padx=10, pady=5)
         
         # Play button
-        self.play_button = ttk.Button(
+        self.play_button = customtkinter.CTkButton(
             self.audio_buttons_frame,
             text="▶️ Play",
             command=self._on_play,
-            state=UIConstants.STATE_DISABLED
+            state=UIConstants.STATE_DISABLED,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.play_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
+        self.play_button.pack(side=customtkinter.LEFT, padx=UIConstants.BUTTON_PADDING)
         
         # Stop button
-        self.stop_button = ttk.Button(
+        self.stop_button = customtkinter.CTkButton(
             self.audio_buttons_frame,
             text="⏹️ Stop",
             command=self._on_stop,
-            state=UIConstants.STATE_DISABLED
+            state=UIConstants.STATE_DISABLED,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.stop_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
+        self.stop_button.pack(side=customtkinter.LEFT, padx=UIConstants.BUTTON_PADDING)
         
         # Download button
-        self.download_button = ttk.Button(
+        self.download_button = customtkinter.CTkButton(
             self.audio_buttons_frame,
             text="📥 Download",
             command=self._on_download,
             state=UIConstants.STATE_DISABLED,
-            width=15
+            width=15,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.download_button.pack(side=tk.LEFT, padx=UIConstants.BUTTON_PADDING)
+        self.download_button.pack(side=customtkinter.LEFT, padx=UIConstants.BUTTON_PADDING)
         
         # Audio file label
-        self.audio_file_var = tk.StringVar(value="No audio file generated yet")
-        self.audio_file_label = ttk.Label(
+        self.audio_file_var = customtkinter.StringVar(value="No audio file generated yet")
+        self.audio_file_label = customtkinter.CTkLabel(
             self.audio_frame,
             textvariable=self.audio_file_var,
-            foreground="gray",
-            wraplength=UIConstants.DEFAULT_WRAP_LENGTH
+            text_color="gray",
+            wraplength=UIConstants.DEFAULT_WRAP_LENGTH,
+            anchor="w",
         )
-        self.audio_file_label.pack(anchor=tk.W, pady=(5, 0), fill=tk.X)
+        self.audio_file_label.pack(anchor=customtkinter.W, pady=(5, 0), fill=customtkinter.X, padx=10)
     
     def set_audio_file(self, file_path):
         """Set the current audio file and enable playback.
@@ -130,7 +139,7 @@ class AudioControls:
         file_extension = self.current_audio_file.suffix
         
         # Open file dialog to choose download location
-        save_path = filedialog.asksaveasfilename(
+        save_path = customtkinter.filedialog.asksaveasfilename(
             title="Save Audio File",
             defaultextension=file_extension,
             filetypes=[
@@ -181,3 +190,5 @@ class AudioControls:
         if pygame.mixer.get_init() and pygame.mixer.music.get_busy():
             pygame.mixer.music.stop()
         pygame.mixer.quit()
+
+

@@ -1,5 +1,6 @@
-import tkinter as tk
-from tkinter import ttk, filedialog
+import customtkinter
+from customtkinter import filedialog
+
 from ...constants import UIConstants
 
 
@@ -15,171 +16,174 @@ class GoogleCloudSettings:
         """
         self.parent = parent
         self.app = app
-        self.frame = ttk.Frame(parent)
+        self.frame = customtkinter.CTkFrame(parent)
         self._create_widgets()
     
     def _create_widgets(self):
         """Create the Google Cloud settings widgets."""
         # Service Account JSON File Configuration Section
-        file_frame = ttk.Frame(self.frame)
-        file_frame.pack(pady=10, fill=tk.X)
+        file_frame = customtkinter.CTkFrame(self.frame, fg_color="transparent")
+        file_frame.pack(pady=10, fill=customtkinter.X)
         
-        ttk.Label(file_frame, text="Google Cloud Service Account JSON File:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(file_frame, text="Google Cloud Service Account JSON File:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5))
         
         # File path entry and browse button
-        path_frame = ttk.Frame(file_frame)
-        path_frame.pack(anchor=tk.W, pady=(0, 10), fill=tk.X)
+        path_frame = customtkinter.CTkFrame(file_frame, fg_color="transparent")
+        path_frame.pack(anchor=customtkinter.W, pady=(0, 10), fill=customtkinter.X)
         
-        self.service_account_path_var = tk.StringVar()
-        self.service_account_path_entry = ttk.Entry(
+        self.service_account_path_var = customtkinter.StringVar()
+        self.service_account_path_entry = customtkinter.CTkEntry(
             path_frame,
             textvariable=self.service_account_path_var,
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=40
+            width=40,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.service_account_path_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.service_account_path_entry.pack(side=customtkinter.LEFT, fill=customtkinter.X, expand=True)
         
-        self.browse_button = ttk.Button(
+        self.browse_button = customtkinter.CTkButton(
             path_frame,
             text="Browse...",
             command=self._browse_service_account_file,
-            width=10
+            width=10,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.browse_button.pack(side=tk.RIGHT, padx=(5, 0))
+        self.browse_button.pack(side=customtkinter.RIGHT, padx=(5, 0))
         
         # Voice Settings Configuration Section
-        voice_settings_frame = ttk.LabelFrame(self.frame, text="Voice Settings", padding=(10, 5))
-        voice_settings_frame.pack(pady=10, fill=tk.X)
+        voice_settings_frame = customtkinter.CTkFrame(self.frame, corner_radius=UIConstants.CORNER_RADIUS)
+        voice_settings_frame.pack(pady=10, fill=customtkinter.X)
         
+        customtkinter.CTkLabel(voice_settings_frame, text="Voice Settings", 
+                               font=customtkinter.CTkFont(weight="bold")).pack(anchor=customtkinter.W, padx=10, pady=(5, 0))
+
         # Language Code
-        ttk.Label(voice_settings_frame, text="Language Code:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(voice_settings_frame, text="Language Code:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5), padx=10)
         
-        self.language_code_var = tk.StringVar()
-        self.language_code_entry = ttk.Entry(
+        self.language_code_var = customtkinter.StringVar()
+        self.language_code_entry = customtkinter.CTkEntry(
             voice_settings_frame,
             textvariable=self.language_code_var,
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=15
+            width=15,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.language_code_entry.pack(anchor=tk.W, pady=(0, 10))
+        self.language_code_entry.pack(anchor=customtkinter.W, pady=(0, 10), padx=10)
         
         # Voice Name
-        ttk.Label(voice_settings_frame, text="Voice Name:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(voice_settings_frame, text="Voice Name:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5), padx=10)
         
-        self.voice_name_var = tk.StringVar()
-        self.voice_name_entry = ttk.Entry(
+        self.voice_name_var = customtkinter.StringVar()
+        self.voice_name_entry = customtkinter.CTkEntry(
             voice_settings_frame,
             textvariable=self.voice_name_var,
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=30
+            width=30,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.voice_name_entry.pack(anchor=tk.W, pady=(0, 10))
+        self.voice_name_entry.pack(anchor=customtkinter.W, pady=(0, 10), padx=10)
         
         # Voice Gender
-        ttk.Label(voice_settings_frame, text="Voice Gender:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(voice_settings_frame, text="Voice Gender:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5), padx=10)
         
-        self.voice_gender_var = tk.StringVar()
-        self.voice_gender_dropdown = ttk.Combobox(
+        self.voice_gender_var = customtkinter.StringVar()
+        self.voice_gender_dropdown = customtkinter.CTkOptionMenu(
             voice_settings_frame,
-            textvariable=self.voice_gender_var,
+            variable=self.voice_gender_var,
             values=["NEUTRAL", "MALE", "FEMALE"],
-            state="readonly",
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=15
+            width=15,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.voice_gender_dropdown.pack(anchor=tk.W, pady=(0, 10))
+        self.voice_gender_dropdown.pack(anchor=customtkinter.W, pady=(0, 10), padx=10)
         
         # Audio Settings Configuration Section
-        audio_settings_frame = ttk.LabelFrame(self.frame, text="Audio Settings", padding=(10, 5))
-        audio_settings_frame.pack(pady=10, fill=tk.X)
+        audio_settings_frame = customtkinter.CTkFrame(self.frame, corner_radius=UIConstants.CORNER_RADIUS)
+        audio_settings_frame.pack(pady=10, fill=customtkinter.X)
         
+        customtkinter.CTkLabel(audio_settings_frame, text="Audio Settings", 
+                               font=customtkinter.CTkFont(weight="bold")).pack(anchor=customtkinter.W, padx=10, pady=(5, 0))
+
         # File Format
-        ttk.Label(audio_settings_frame, text="File Format:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(audio_settings_frame, text="File Format:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5), padx=10)
         
-        self.file_format_var = tk.StringVar()
-        self.file_format_dropdown = ttk.Combobox(
+        self.file_format_var = customtkinter.StringVar()
+        self.file_format_dropdown = customtkinter.CTkOptionMenu(
             audio_settings_frame,
-            textvariable=self.file_format_var,
+            variable=self.file_format_var,
             values=[".mp3", ".wav"],
-            state="readonly",
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=15
+            width=15,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.file_format_dropdown.pack(anchor=tk.W, pady=(0, 10))
+        self.file_format_dropdown.pack(anchor=customtkinter.W, pady=(0, 10), padx=10)
         
         # Speaking Rate
-        speaking_rate_frame = ttk.Frame(audio_settings_frame)
-        speaking_rate_frame.pack(pady=5, fill=tk.X)
+        speaking_rate_frame = customtkinter.CTkFrame(audio_settings_frame, fg_color="transparent")
+        speaking_rate_frame.pack(pady=5, fill=customtkinter.X, padx=10)
         
-        ttk.Label(speaking_rate_frame, text="Speaking Rate (0.25 - 2.0):", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W)
+        customtkinter.CTkLabel(speaking_rate_frame, text="Speaking Rate (0.25 - 2.0):", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W)
         
-        self.speaking_rate_var = tk.DoubleVar(value=1.0)
-        self.speaking_rate_scale = ttk.Scale(
+        self.speaking_rate_var = customtkinter.DoubleVar(value=1.0)
+        self.speaking_rate_scale = customtkinter.CTkSlider(
             speaking_rate_frame,
             from_=0.25,
             to=2.0,
             variable=self.speaking_rate_var,
-            orient=tk.HORIZONTAL,
-            length=300
+            command=lambda val: self.speaking_rate_value_label.configure(text=f"{float(val):.2f}"),
         )
-        self.speaking_rate_scale.pack(anchor=tk.W, pady=(2, 0))
+        self.speaking_rate_scale.pack(anchor=customtkinter.W, pady=(2, 0))
         
-        self.speaking_rate_value_label = ttk.Label(speaking_rate_frame, text="1.0")
-        self.speaking_rate_value_label.pack(anchor=tk.W)
+        self.speaking_rate_value_label = customtkinter.CTkLabel(speaking_rate_frame, text="1.0")
+        self.speaking_rate_value_label.pack(anchor=customtkinter.W)
         
-        self.speaking_rate_scale.configure(command=lambda val: self.speaking_rate_value_label.configure(text=f"{float(val):.2f}"))
         
         # Pitch
-        pitch_frame = ttk.Frame(audio_settings_frame)
-        pitch_frame.pack(pady=5, fill=tk.X)
+        pitch_frame = customtkinter.CTkFrame(audio_settings_frame, fg_color="transparent")
+        pitch_frame.pack(pady=5, fill=customtkinter.X, padx=10)
         
-        ttk.Label(pitch_frame, text="Pitch (-20.0 to 20.0):", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W)
+        customtkinter.CTkLabel(pitch_frame, text="Pitch (-20.0 to 20.0):", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W)
         
-        self.pitch_var = tk.DoubleVar(value=0.0)
-        self.pitch_scale = ttk.Scale(
+        self.pitch_var = customtkinter.DoubleVar(value=0.0)
+        self.pitch_scale = customtkinter.CTkSlider(
             pitch_frame,
             from_=-20.0,
             to=20.0,
             variable=self.pitch_var,
-            orient=tk.HORIZONTAL,
-            length=300
+            command=lambda val: self.pitch_value_label.configure(text=f"{float(val):.2f}"),
         )
-        self.pitch_scale.pack(anchor=tk.W, pady=(2, 0))
+        self.pitch_scale.pack(anchor=customtkinter.W, pady=(2, 0))
         
-        self.pitch_value_label = ttk.Label(pitch_frame, text="0.0")
-        self.pitch_value_label.pack(anchor=tk.W)
+        self.pitch_value_label = customtkinter.CTkLabel(pitch_frame, text="0.0")
+        self.pitch_value_label.pack(anchor=customtkinter.W)
         
-        self.pitch_scale.configure(command=lambda val: self.pitch_value_label.configure(text=f"{float(val):.2f}"))
         
         # Volume Gain
-        volume_gain_frame = ttk.Frame(audio_settings_frame)
-        volume_gain_frame.pack(pady=5, fill=tk.X)
+        volume_gain_frame = customtkinter.CTkFrame(audio_settings_frame, fg_color="transparent")
+        volume_gain_frame.pack(pady=5, fill=customtkinter.X, padx=10)
         
-        ttk.Label(volume_gain_frame, text="Volume Gain (-16.0 to 16.0 dB):", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W)
+        customtkinter.CTkLabel(volume_gain_frame, text="Volume Gain (-16.0 to 16.0 dB):", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W)
         
-        self.volume_gain_var = tk.DoubleVar(value=0.0)
-        self.volume_gain_scale = ttk.Scale(
+        self.volume_gain_var = customtkinter.DoubleVar(value=0.0)
+        self.volume_gain_scale = customtkinter.CTkSlider(
             volume_gain_frame,
             from_=-16.0,
             to=16.0,
             variable=self.volume_gain_var,
-            orient=tk.HORIZONTAL,
-            length=300
+            command=lambda val: self.volume_gain_value_label.configure(text=f"{float(val):.1f}"),
         )
-        self.volume_gain_scale.pack(anchor=tk.W, pady=(2, 0))
+        self.volume_gain_scale.pack(anchor=customtkinter.W, pady=(2, 0))
         
-        self.volume_gain_value_label = ttk.Label(volume_gain_frame, text="0.0")
-        self.volume_gain_value_label.pack(anchor=tk.W)
-        
-        self.volume_gain_scale.configure(command=lambda val: self.volume_gain_value_label.configure(text=f"{float(val):.1f}"))
+        self.volume_gain_value_label = customtkinter.CTkLabel(volume_gain_frame, text="0.0")
+        self.volume_gain_value_label.pack(anchor=customtkinter.W)
     
     def _browse_service_account_file(self):
         """Open file dialog to browse for service account JSON file."""
@@ -251,3 +255,5 @@ class GoogleCloudSettings:
             "volume_gain_db": self.volume_gain_var.get(),
             "file_extension": file_format
         }
+
+

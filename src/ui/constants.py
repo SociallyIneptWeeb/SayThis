@@ -11,6 +11,7 @@ class UIConstants:
     FRAME_PADDING = 20
     BUTTON_PADDING = TEXT_PADDING = 5
     WINDOW_PADDING_ADJUST = 40  # Used to adjust wrap length on resize
+    CORNER_RADIUS = 10
     
     # Font settings
     DEFAULT_FONT_SIZE = 11
@@ -37,6 +38,5 @@ class UIConstants:
     UNSET_USAGE = "--"
     CHARACTER_USAGE_FORMAT = "Used: {} / {} characters"
     CHARACTER_USAGE_NOT_AVAILABLE = "Usage tracking not available for this service"
-    
-    # Entry widget settings
-    API_KEY_ENTRY_SHOW_CHAR = "*"
+
+

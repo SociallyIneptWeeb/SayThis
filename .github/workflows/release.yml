@@ -23,7 +23,12 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt pyinstaller
 
-    - name: Build executable
+    - name: Build executable (macOS)
+      if: runner.os == 'macOS'
+      run: pyinstaller src/main.py --onefile --name=SayThis-${{ runner.os }}
+
+    - name: Build executable (Windows/Linux)
+      if: runner.os != 'macOS'
       run: pyinstaller src/main.py --onefile --noconsole --name=SayThis-${{ runner.os }}
 
     - name: Zip dist folder (Windows)
@@ -35,7 +40,7 @@ jobs:
     - name: Zip dist folder (Unix)
       if: runner.os != 'Windows'
       run: |
-        zip -r saythis-${{ runner.os }}.zip dist/
+        cd dist && zip ../saythis-${{ runner.os }}.zip *
 
     - name: Upload ZIP as artifact
       uses: actions/upload-artifact@v4

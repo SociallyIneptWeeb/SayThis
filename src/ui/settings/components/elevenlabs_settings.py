@@ -230,13 +230,13 @@ class ElevenLabsSettings:
         # Add tooltip to the speaker boost checkbox
         ToolTip(self.use_speaker_boost_checkbox, "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.")
     
-    def pack(self, **kwargs):
-        """Pack the component frame."""
-        self.frame.pack(**kwargs)
+    def grid(self, **kwargs):
+        """Grid the component frame."""
+        self.frame.grid(**kwargs)
     
-    def pack_forget(self):
-        """Hide the component frame."""
-        self.frame.pack_forget()
+    def grid_remove(self):
+        """Remove the component frame from grid."""
+        self.frame.grid_remove()
     
     def load_settings(self):
         """Load settings from the application configuration."""

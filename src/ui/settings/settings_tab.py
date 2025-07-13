@@ -55,6 +55,9 @@ class SettingsTab:
         self.settings_container = ttk.Frame(container)
         self.settings_container.pack(pady=10, padx=UIConstants.FRAME_PADDING, fill=tk.BOTH, expand=True)
         
+        self.settings_container.grid_rowconfigure(0, weight=1)
+        self.settings_container.grid_columnconfigure(0, weight=1)
+        
         # Create settings components for each service
         self.elevenlabs_settings = ElevenLabsSettings(self.settings_container, self.app)
         self.google_cloud_settings = GoogleCloudSettings(self.settings_container, self.app)
@@ -81,19 +84,18 @@ class SettingsTab:
     
     def _show_settings(self, service):
         """Show settings for the selected TTS service."""
-        # Hide all service frames
-        self.elevenlabs_settings.pack_forget()
-        self.google_cloud_settings.pack_forget()
+        self.elevenlabs_settings.grid_remove()
+        self.google_cloud_settings.grid_remove()
         
         self.character_usage.load_character_usage()
 
         # Show the selected service frame and load its settings
         if service == "ElevenLabs":
             self.elevenlabs_settings.load_settings()
-            self.elevenlabs_settings.pack(fill=tk.BOTH, expand=True)
+            self.elevenlabs_settings.grid(row=0, column=0, sticky="nsew")
         elif service == "Google Cloud":
             self.google_cloud_settings.load_settings()
-            self.google_cloud_settings.pack(fill=tk.BOTH, expand=True)
+            self.google_cloud_settings.grid(row=0, column=0, sticky="nsew")
     
     def _on_save_settings(self):
         """Handle save settings button click."""

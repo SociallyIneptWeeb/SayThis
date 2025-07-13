@@ -189,14 +189,14 @@ class GoogleCloudSettings:
         )
         if file_path:
             self.service_account_path_var.set(file_path)
+
+    def grid(self, **kwargs):
+        """Grid the component frame."""
+        self.frame.grid(**kwargs)
     
-    def pack(self, **kwargs):
-        """Pack the component frame."""
-        self.frame.pack(**kwargs)
-    
-    def pack_forget(self):
-        """Hide the component frame."""
-        self.frame.pack_forget()
+    def grid_remove(self):
+        """Remove the component frame from grid."""
+        self.frame.grid_remove()
     
     def load_settings(self):
         """Load settings from the application configuration."""

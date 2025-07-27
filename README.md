@@ -13,6 +13,8 @@ A simple Python GUI App that generates audio from text using online TTS services
    - **macOS**: `saythis-macOS.zip`
    - **Linux**: `saythis-Linux.zip`
 
+**WARNING**: MacOS release executable has performance issues and is not functioning as expected.
+
 ### Step 2: Extract and Run
 
 1. Extract the downloaded ZIP file to a folder of your choice

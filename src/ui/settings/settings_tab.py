@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+import customtkinter
+from customtkinter import filedialog
 
 from ..constants import UIConstants
 from .components import (
@@ -31,20 +31,20 @@ class SettingsTab:
         """Create and layout all settings UI components."""
         # Create scrollable frame
         self.scroll_frame = ScrollFrame(self.root)
-        self.scroll_frame.pack(fill=tk.BOTH, expand=True)
+        self.scroll_frame.pack(fill=customtkinter.BOTH, expand=True)
         
         # All components will be added to the scroll_frame's viewPort
         container = self.scroll_frame.viewPort
         
         # TTS Service Selection Section
-        service_frame = ttk.Frame(container)
-        service_frame.pack(pady=(UIConstants.FRAME_PADDING, 0), padx=UIConstants.FRAME_PADDING, fill=tk.X)
+        service_frame = customtkinter.CTkFrame(container, corner_radius=UIConstants.CORNER_RADIUS)
+        service_frame.pack(pady=(UIConstants.FRAME_PADDING, 0), padx=UIConstants.FRAME_PADDING, fill=customtkinter.X)
         
         self.service_selector = ServiceSelector(service_frame, self.app, self._on_service_changed)
         
         # Character usage section
-        usage_frame = ttk.Frame(container)
-        usage_frame.pack(padx=UIConstants.FRAME_PADDING, fill=tk.X)
+        usage_frame = customtkinter.CTkFrame(container, corner_radius=UIConstants.CORNER_RADIUS)
+        usage_frame.pack(padx=UIConstants.FRAME_PADDING, fill=customtkinter.X)
         
         self.character_usage = CharacterUsageLabel(
             usage_frame, 
@@ -52,8 +52,8 @@ class SettingsTab:
         )
         
         # Settings container frame
-        self.settings_container = ttk.Frame(container)
-        self.settings_container.pack(pady=10, padx=UIConstants.FRAME_PADDING, fill=tk.BOTH, expand=True)
+        self.settings_container = customtkinter.CTkFrame(container, fg_color="transparent")
+        self.settings_container.pack(pady=10, padx=UIConstants.FRAME_PADDING, fill=customtkinter.BOTH, expand=True)
         
         self.settings_container.grid_rowconfigure(0, weight=1)
         self.settings_container.grid_columnconfigure(0, weight=1)
@@ -63,16 +63,17 @@ class SettingsTab:
         self.google_cloud_settings = GoogleCloudSettings(self.settings_container, self.app)
         
         # Save button at the bottom
-        save_frame = ttk.Frame(container)
-        save_frame.pack(pady=10, padx=20, fill=tk.X)
+        save_frame = customtkinter.CTkFrame(container, fg_color="transparent")
+        save_frame.pack(pady=10, padx=20, fill=customtkinter.X)
         
-        self.save_button = ttk.Button(
+        self.save_button = customtkinter.CTkButton(
             save_frame,
             text="Save Settings",
             command=self._on_save_settings,
             width=20,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.save_button.pack(anchor=tk.CENTER)
+        self.save_button.pack(anchor=customtkinter.CENTER)
 
         # Show initial service settings
         self._show_settings(self.app.get_selected_service())
@@ -109,8 +110,10 @@ class SettingsTab:
                 self.app.set_service_config(config)
                         
             self.character_usage.load_character_usage()
-            messagebox.showinfo("Success", "Settings saved successfully!")
+            customtkinter.CTkMessagebox.showinfo("Success", "Settings saved successfully!")
 
         except Exception as e:
             # Handle save error
-            messagebox.showerror("Error", f"Error saving settings: {str(e)}")
+            customtkinter.CTkMessagebox.showerror("Error", f"Error saving settings: {str(e)}")
+
+

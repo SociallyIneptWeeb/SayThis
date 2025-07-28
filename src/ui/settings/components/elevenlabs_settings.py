@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
+
 from ...constants import UIConstants
 from .tooltip import ToolTip
 
@@ -16,79 +16,81 @@ class ElevenLabsSettings:
         """
         self.parent = parent
         self.app = app
-        self.frame = ttk.Frame(parent)
+        self.frame = customtkinter.CTkFrame(parent)
         self._create_widgets()
     
     def _create_widgets(self):
         """Create the ElevenLabs settings widgets."""
         # API Key Configuration Section
-        api_frame = ttk.Frame(self.frame)
-        api_frame.pack(pady=10, fill=tk.X)
+        api_frame = customtkinter.CTkFrame(self.frame, fg_color="transparent")
+        api_frame.pack(pady=10, fill=customtkinter.X)
         
         # API Key label and entry
-        ttk.Label(api_frame, text="ElevenLabs API Key:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(api_frame, text="ElevenLabs API Key:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5))
         
         # API Key entry field
-        self.api_key_var = tk.StringVar()
-        self.api_key_entry = ttk.Entry(
+        self.api_key_var = customtkinter.StringVar()
+        self.api_key_entry = customtkinter.CTkEntry(
             api_frame,
             textvariable=self.api_key_var,
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
             show=UIConstants.API_KEY_ENTRY_SHOW_CHAR,
-            width=40
+            width=40,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.api_key_entry.pack(anchor=tk.W)
+        self.api_key_entry.pack(anchor=customtkinter.W)
         
         # Voice ID Configuration Section
-        voice_frame = ttk.Frame(self.frame)
-        voice_frame.pack(pady=10, fill=tk.X)
+        voice_frame = customtkinter.CTkFrame(self.frame, fg_color="transparent")
+        voice_frame.pack(pady=10, fill=customtkinter.X)
         
-        ttk.Label(voice_frame, text="Voice ID:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(voice_frame, text="Voice ID:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5))
         
-        self.voice_id_var = tk.StringVar()
-        voice_id_entry = ttk.Entry(
+        self.voice_id_var = customtkinter.StringVar()
+        voice_id_entry = customtkinter.CTkEntry(
             voice_frame,
             textvariable=self.voice_id_var,
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=40
+            width=40,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        voice_id_entry.pack(anchor=tk.W)
+        voice_id_entry.pack(anchor=customtkinter.W)
         
         # Model ID Configuration Section
-        model_frame = ttk.Frame(self.frame)
-        model_frame.pack(pady=10, fill=tk.X)
+        model_frame = customtkinter.CTkFrame(self.frame, fg_color="transparent")
+        model_frame.pack(pady=10, fill=customtkinter.X)
         
         # Model ID label and entry
-        ttk.Label(model_frame, text="Model ID:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(model_frame, text="Model ID:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5))
         
         # Model ID dropdown field
-        self.model_id_var = tk.StringVar()
-        self.model_id_dropdown = ttk.Combobox(
+        self.model_id_var = customtkinter.StringVar()
+        self.model_id_dropdown = customtkinter.CTkOptionMenu(
             model_frame,
-            textvariable=self.model_id_var,
+            variable=self.model_id_var,
             values=["eleven_turbo_v2_5", "eleven_flash_v2_5", "eleven_multilingual_v2", "eleven_v3"],
-            state="readonly",
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=38
+            width=38,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.model_id_dropdown.pack(anchor=tk.W)
+        self.model_id_dropdown.pack(anchor=customtkinter.W)
         
         # Output Format Configuration Section
-        output_frame = ttk.Frame(self.frame)
-        output_frame.pack(pady=10, fill=tk.X)
+        output_frame = customtkinter.CTkFrame(self.frame, fg_color="transparent")
+        output_frame.pack(pady=10, fill=customtkinter.X)
         
         # Output Format label and dropdown
-        ttk.Label(output_frame, text="Output Format:", 
-                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=tk.W, pady=(0, 5))
+        customtkinter.CTkLabel(output_frame, text="Output Format:", 
+                  font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE)).pack(anchor=customtkinter.W, pady=(0, 5))
         
         # Output Format dropdown field
-        self.output_format_var = tk.StringVar()
-        self.output_format_dropdown = ttk.Combobox(
+        self.output_format_var = customtkinter.StringVar()
+        self.output_format_dropdown = customtkinter.CTkOptionMenu(
             output_frame,
-            textvariable=self.output_format_var,
+            variable=self.output_format_var,
             values=[
                 "mp3_22050_32",
                 "mp3_44100_32",
@@ -97,135 +99,130 @@ class ElevenLabsSettings:
                 "mp3_44100_128",
                 "mp3_44100_192"
             ],
-            state="readonly",
             font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE),
-            width=38
+            width=38,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.output_format_dropdown.pack(anchor=tk.W)
+        self.output_format_dropdown.pack(anchor=customtkinter.W)
         
         # Voice Settings Configuration Section
-        voice_settings_frame = ttk.LabelFrame(self.frame, text="Voice Settings", padding=(10, 5))
-        voice_settings_frame.pack(pady=10, fill=tk.X)
+        voice_settings_frame = customtkinter.CTkFrame(self.frame, corner_radius=UIConstants.CORNER_RADIUS)
+        voice_settings_frame.pack(pady=10, fill=customtkinter.X)
         
+        customtkinter.CTkLabel(voice_settings_frame, text="Voice Settings", 
+                               font=customtkinter.CTkFont(weight="bold")).pack(anchor=customtkinter.W, padx=10, pady=(5, 0))
+
         # Stability slider
-        stability_frame = ttk.Frame(voice_settings_frame)
-        stability_frame.pack(pady=5, fill=tk.X)
+        stability_frame = customtkinter.CTkFrame(voice_settings_frame, fg_color="transparent")
+        stability_frame.pack(pady=5, fill=customtkinter.X, padx=10)
         
-        stability_label = ttk.Label(stability_frame, text="Stability:", 
+        stability_label = customtkinter.CTkLabel(stability_frame, text="Stability:", 
                   font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE))
-        stability_label.pack(anchor=tk.W)
+        stability_label.pack(anchor=customtkinter.W)
         
         # Add tooltip to the stability label
         ToolTip(stability_label, "Determines how stable the voice is and the randomness between each generation. Lower values introduce broader emotional range for the voice. Higher values can result in a monotonous voice with limited emotion.")
 
-        self.stability_var = tk.DoubleVar(value=0.5)
-        self.stability_scale = ttk.Scale(
+        self.stability_var = customtkinter.DoubleVar(value=0.5)
+        self.stability_scale = customtkinter.CTkSlider(
             stability_frame,
             from_=0.0,
             to=1.0,
             variable=self.stability_var,
-            orient=tk.HORIZONTAL,
-            length=300
+            command=lambda val: self.stability_value_label.configure(text=f"{float(val):.2f}"),
         )
-        self.stability_scale.pack(anchor=tk.W, pady=(2, 0))
+        self.stability_scale.pack(anchor=customtkinter.W, pady=(2, 0))
         
-        self.stability_value_label = ttk.Label(stability_frame, text="0.5")
-        self.stability_value_label.pack(anchor=tk.W)
+        self.stability_value_label = customtkinter.CTkLabel(stability_frame, text="0.5")
+        self.stability_value_label.pack(anchor=customtkinter.W)
         
-        self.stability_scale.configure(command=lambda val: self.stability_value_label.configure(text=f"{float(val):.2f}"))
         
         # Similarity Boost slider
-        similarity_frame = ttk.Frame(voice_settings_frame)
-        similarity_frame.pack(pady=5, fill=tk.X)
+        similarity_frame = customtkinter.CTkFrame(voice_settings_frame, fg_color="transparent")
+        similarity_frame.pack(pady=5, fill=customtkinter.X, padx=10)
         
-        similarity_label = ttk.Label(similarity_frame, text="Similarity Boost:", 
+        similarity_label = customtkinter.CTkLabel(similarity_frame, text="Similarity Boost:", 
                   font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE))
-        similarity_label.pack(anchor=tk.W)
+        similarity_label.pack(anchor=customtkinter.W)
         
         # Add tooltip to the similarity boost label
         ToolTip(similarity_label, "Determines how closely the AI should adhere to the original voice when attempting to replicate it.")
         
-        self.similarity_boost_var = tk.DoubleVar(value=0.75)
-        self.similarity_boost_scale = ttk.Scale(
+        self.similarity_boost_var = customtkinter.DoubleVar(value=0.75)
+        self.similarity_boost_scale = customtkinter.CTkSlider(
             similarity_frame,
             from_=0.0,
             to=1.0,
             variable=self.similarity_boost_var,
-            orient=tk.HORIZONTAL,
-            length=300
+            command=lambda val: self.similarity_value_label.configure(text=f"{float(val):.2f}"),
         )
-        self.similarity_boost_scale.pack(anchor=tk.W, pady=(2, 0))
+        self.similarity_boost_scale.pack(anchor=customtkinter.W, pady=(2, 0))
         
-        self.similarity_value_label = ttk.Label(similarity_frame, text="0.75")
-        self.similarity_value_label.pack(anchor=tk.W)
+        self.similarity_value_label = customtkinter.CTkLabel(similarity_frame, text="0.75")
+        self.similarity_value_label.pack(anchor=customtkinter.W)
         
-        self.similarity_boost_scale.configure(command=lambda val: self.similarity_value_label.configure(text=f"{float(val):.2f}"))
         
         # Style slider
-        style_frame = ttk.Frame(voice_settings_frame)
-        style_frame.pack(pady=5, fill=tk.X)
+        style_frame = customtkinter.CTkFrame(voice_settings_frame, fg_color="transparent")
+        style_frame.pack(pady=5, fill=customtkinter.X, padx=10)
         
-        style_label = ttk.Label(style_frame, text="Style:", 
+        style_label = customtkinter.CTkLabel(style_frame, text="Style:", 
                   font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE))
-        style_label.pack(anchor=tk.W)
+        style_label.pack(anchor=customtkinter.W)
         
         # Add tooltip to the style label
         ToolTip(style_label, "Determines the style exaggeration of the voice. This setting attempts to amplify the style of the original speaker. It does consume additional computational resources and might increase latency if set to anything other than 0.")
 
-        self.style_var = tk.DoubleVar(value=0.0)
-        self.style_scale = ttk.Scale(
+        self.style_var = customtkinter.DoubleVar(value=0.0)
+        self.style_scale = customtkinter.CTkSlider(
             style_frame,
             from_=0.0,
             to=1.0,
             variable=self.style_var,
-            orient=tk.HORIZONTAL,
-            length=300
+            command=lambda val: self.style_value_label.configure(text=f"{float(val):.2f}"),
         )
-        self.style_scale.pack(anchor=tk.W, pady=(2, 0))
+        self.style_scale.pack(anchor=customtkinter.W, pady=(2, 0))
         
-        self.style_value_label = ttk.Label(style_frame, text="0.0")
-        self.style_value_label.pack(anchor=tk.W)
+        self.style_value_label = customtkinter.CTkLabel(style_frame, text="0.0")
+        self.style_value_label.pack(anchor=customtkinter.W)
         
-        self.style_scale.configure(command=lambda val: self.style_value_label.configure(text=f"{float(val):.2f}"))
         
         # Speed slider
-        speed_frame = ttk.Frame(voice_settings_frame)
-        speed_frame.pack(pady=5, fill=tk.X)
+        speed_frame = customtkinter.CTkFrame(voice_settings_frame, fg_color="transparent")
+        speed_frame.pack(pady=5, fill=customtkinter.X, padx=10)
         
-        speed_label = ttk.Label(speed_frame, text="Speed:", 
+        speed_label = customtkinter.CTkLabel(speed_frame, text="Speed:", 
                   font=(UIConstants.DEFAULT_FONT_FAMILY, UIConstants.DEFAULT_FONT_SIZE))
-        speed_label.pack(anchor=tk.W)
+        speed_label.pack(anchor=customtkinter.W)
         
         # Add tooltip to the speed label
         ToolTip(speed_label, "Adjusts the speed of the voice. A value of 1.0 is the default speed, while values less than 1.0 slow down the speech, and values greater than 1.0 speed it up.")
 
-        self.speed_var = tk.DoubleVar(value=1.0)
-        self.speed_scale = ttk.Scale(
+        self.speed_var = customtkinter.DoubleVar(value=1.0)
+        self.speed_scale = customtkinter.CTkSlider(
             speed_frame,
             from_=0.7,
             to=1.2,
             variable=self.speed_var,
-            orient=tk.HORIZONTAL,
-            length=300
+            command=lambda val: self.speed_value_label.configure(text=f"{float(val):.2f}"),
         )
-        self.speed_scale.pack(anchor=tk.W, pady=(2, 0))
+        self.speed_scale.pack(anchor=customtkinter.W, pady=(2, 0))
         
-        self.speed_value_label = ttk.Label(speed_frame, text="1.0")
-        self.speed_value_label.pack(anchor=tk.W)
+        self.speed_value_label = customtkinter.CTkLabel(speed_frame, text="1.0")
+        self.speed_value_label.pack(anchor=customtkinter.W)
         
-        self.speed_scale.configure(command=lambda val: self.speed_value_label.configure(text=f"{float(val):.2f}"))
         
         # Use Speaker Boost checkbox
-        speaker_boost_frame = ttk.Frame(voice_settings_frame)
-        speaker_boost_frame.pack(pady=5, fill=tk.X)
+        speaker_boost_frame = customtkinter.CTkFrame(voice_settings_frame, fg_color="transparent")
+        speaker_boost_frame.pack(pady=5, fill=customtkinter.X, padx=10)
 
-        self.use_speaker_boost_var = tk.BooleanVar(value=True)
-        self.use_speaker_boost_checkbox = ttk.Checkbutton(
+        self.use_speaker_boost_var = customtkinter.BooleanVar(value=True)
+        self.use_speaker_boost_checkbox = customtkinter.CTkCheckBox(
             speaker_boost_frame,
             text="Use Speaker Boost",
             variable=self.use_speaker_boost_var,
         )
-        self.use_speaker_boost_checkbox.pack(anchor=tk.W)
+        self.use_speaker_boost_checkbox.pack(anchor=customtkinter.W)
         
         # Add tooltip to the speaker boost checkbox
         ToolTip(self.use_speaker_boost_checkbox, "This setting boosts the similarity to the original speaker. Using this setting requires a slightly higher computational load, which in turn increases latency.")
@@ -280,3 +277,5 @@ class ElevenLabsSettings:
                 "use_speaker_boost": self.use_speaker_boost_var.get()
             }
         }
+
+

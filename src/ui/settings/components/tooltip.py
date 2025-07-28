@@ -1,4 +1,4 @@
-import tkinter as tk
+import customtkinter
 
 
 class ToolTip:
@@ -25,24 +25,18 @@ class ToolTip:
             y = self.widget.winfo_rooty() + 20  # Adjust offset as needed
 
             # Create tooltip label
-            self.tooltip_label = tk.Toplevel(self.widget)
-            self.tooltip_label.wm_overrideredirect(True)
-            self.tooltip_label.wm_geometry(f"+{x}+{y}")
+            self.tooltip_label = customtkinter.CTkToplevel(self.widget)
+            self.tooltip_label.geometry(f"+{x}+{y}")
             
             # Create the tooltip content
-            label = tk.Label(
+            label = customtkinter.CTkLabel(
                 self.tooltip_label, 
                 text=self.text,
-                background="lightyellow", 
-                relief="solid", 
-                borderwidth=1,
+                fg_color="lightyellow", 
                 wraplength=300,  # Wrap text for long tooltips
-                justify="left",
-                padx=5,
-                pady=3
             )
             label.pack()
-        except tk.TclError:
+        except Exception:
             # Handle case where widget is destroyed
             pass
 
@@ -51,8 +45,10 @@ class ToolTip:
         if self.tooltip_label:
             try:
                 self.tooltip_label.destroy()
-            except tk.TclError:
+            except Exception:
                 # Handle case where tooltip is already destroyed
                 pass
             finally:
                 self.tooltip_label = None
+
+

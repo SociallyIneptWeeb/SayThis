@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
+
 from ...constants import UIConstants
 
 
@@ -21,22 +21,24 @@ class ControlButtons:
     
     def _create_widgets(self):
         """Create the control button widgets."""
-        self.button_frame = ttk.Frame(self.parent)
-        self.button_frame.pack(side=tk.TOP, fill=tk.X)
+        self.button_frame = customtkinter.CTkFrame(self.parent, fg_color="transparent")
+        self.button_frame.pack(side=customtkinter.TOP, fill=customtkinter.X)
         
-        self.generate_button = ttk.Button(
+        self.generate_button = customtkinter.CTkButton(
             self.button_frame, 
             text="Generate Audio",
-            command=self.on_generate
+            command=self.on_generate,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.generate_button.pack(side=tk.RIGHT, padx=UIConstants.BUTTON_PADDING)
+        self.generate_button.pack(side=customtkinter.RIGHT, padx=UIConstants.BUTTON_PADDING)
         
-        self.clear_button = ttk.Button(
+        self.clear_button = customtkinter.CTkButton(
             self.button_frame, 
             text="Clear",
-            command=self.on_clear
+            command=self.on_clear,
+            corner_radius=UIConstants.CORNER_RADIUS,
         )
-        self.clear_button.pack(side=tk.RIGHT, padx=UIConstants.BUTTON_PADDING)
+        self.clear_button.pack(side=customtkinter.RIGHT, padx=UIConstants.BUTTON_PADDING)
     
     def set_generate_enabled(self, enabled):
         """Enable or disable the generate button.
@@ -46,3 +48,5 @@ class ControlButtons:
         """
         state = UIConstants.STATE_NORMAL if enabled else UIConstants.STATE_DISABLED
         self.generate_button.configure(state=state)
+
+

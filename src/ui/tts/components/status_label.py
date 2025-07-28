@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
+
 from ...constants import UIConstants
 
 
@@ -18,14 +18,15 @@ class StatusLabel:
     def _create_widgets(self):
         """Create the status label widget."""
         # Status label
-        self.status_var = tk.StringVar(value="Ready")
-        self.status_label = ttk.Label(
+        self.status_var = customtkinter.StringVar(value="Ready")
+        self.status_label = customtkinter.CTkLabel(
             self.parent, 
             textvariable=self.status_var,
-            foreground=UIConstants.STATUS_COLOR_READY,
+            text_color=UIConstants.STATUS_COLOR_READY,
             wraplength=UIConstants.DEFAULT_WRAP_LENGTH,
+            anchor="w",
         )
-        self.status_label.pack(side=tk.TOP, anchor=tk.W, pady=(10, 0), fill=tk.X)
+        self.status_label.pack(side=customtkinter.TOP, anchor=customtkinter.W, pady=(10, 0), fill=customtkinter.X)
     
     def set_status(self, message, color="gray"):
         """Set the status message and color.
@@ -35,7 +36,7 @@ class StatusLabel:
             color (str): The text color (default: "gray")
         """
         self.status_var.set(message)
-        self.status_label.configure(foreground=color)
+        self.status_label.configure(text_color=color)
     
     def set_error(self, error_message):
         """Set an error status message.
@@ -52,3 +53,5 @@ class StatusLabel:
             width (int): The new width for wrapping
         """
         self.status_label.configure(wraplength=width)
+
+
